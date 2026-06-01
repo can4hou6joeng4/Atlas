@@ -4,7 +4,7 @@ extension ReleaseHistoryCatalog {
     static let generatedEntries: [ReleaseHistoryEntry] = [
         ReleaseHistoryEntry(
             version: "1.0.0",
-            date: "May 26, 2026",
+            date: "June 1, 2026",
             headline: "重新定位为精简后的新产品起点",
             changes: [
                 "以精简后的应用形态作为新的版本基线",
