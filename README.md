@@ -15,47 +15,31 @@ TokenAtlas turns them into a local-first macOS surface: a menu-bar app for quick
 
 ## See It
 
+<p align="center">
+  <img src="docs/assets/screens/readme-main-overview.png" alt="TokenAtlas dashboard showing local AI coding activity">
+</p>
+
 <table>
 <tr>
   <td align="center" width="33%">
-    <img src="docs/assets/screens/menubar-usage.gif" alt="Menu-bar usage panel">
+    <img src="docs/assets/screens/readme-usage.png" alt="Token usage view">
     <br><b>Usage</b>
-    <br><sub>Tokens, sessions, cost, and activity from the menu bar</sub>
+    <br><sub>Tokens, cost, cache, and model mix by period</sub>
   </td>
   <td align="center" width="33%">
-    <img src="docs/assets/screens/dashboard-overview.png" alt="TokenAtlas dashboard overview">
-    <br><b>Dashboard</b>
-    <br><sub>Native macOS views for local AI coding records</sub>
-  </td>
-  <td align="center" width="33%">
-    <img src="docs/assets/screens/usage-token-limits.png" alt="Token usage and limits">
-    <br><b>Limits</b>
-    <br><sub>Provider usage, limits, and status in one place</sub>
-  </td>
-</tr>
-</table>
-
-<table>
-<tr>
-  <td align="center" width="33%">
-    <img src="docs/assets/screens/sessions-overview.png" alt="Session statistics overview">
+    <img src="docs/assets/screens/readme-sessions.png" alt="Session statistics overview">
     <br><b>Sessions</b>
-    <br><sub>Daily and historical records for local work</sub>
+    <br><sub>Discovered conversations, projects, messages, and cache hit rate</sub>
   </td>
   <td align="center" width="33%">
-    <img src="docs/assets/screens/git-repository-workspace.png" alt="Git repository workspace">
-    <br><b>Repository</b>
-    <br><sub>Git and workspace activity without leaving the app</sub>
-  </td>
-  <td align="center" width="33%">
-    <img src="docs/assets/screens/skills-library.png" alt="Local and plugin skills library">
-    <br><b>Local Knowledge</b>
-    <br><sub>Plans, config, and skills that explain how the machine works</sub>
+    <img src="docs/assets/screens/readme-git-activity.png" alt="Git activity and usage correlation">
+    <br><b>Git Activity</b>
+    <br><sub>Commit history correlated with AI coding usage</sub>
   </td>
 </tr>
 </table>
 
-More screenshots and GIF demos live in [`docs/assets/screens`](docs/assets/screens).
+Additional screenshots and GIF demos live in [`docs/assets/screens`](docs/assets/screens).
 
 ## Features
 
@@ -69,7 +53,8 @@ More screenshots and GIF demos live in [`docs/assets/screens`](docs/assets/scree
 
 ## Install
 
-Packaged builds are published through the public release mirror:
+Packaged builds are published through the public release mirror when maintainers
+cut a release tag:
 
 - [GitHub Releases](https://github.com/can4hou6joeng4/TokenAtlas-releases/releases)
 - [Sparkle appcast](https://can4hou6joeng4.github.io/TokenAtlas-releases/appcast.xml)
