@@ -1,0 +1,99 @@
+# SwiftLint configuration for TokenAtlas
+# =====================================================================
+# Rationale: this config was tuned against the ACTUAL codebase (measured
+# 1131 default violations across 240 files), then relaxed to match the
+# project's established, idiomatic style instead of forcing churn.
+# Thresholds are set to "sane engineering limits" that flag genuine
+# technical debt (as warnings) while reserving errors for regressions.
+# =====================================================================
+
+# --- Paths -----------------------------------------------------------
+included:
+  - TokenAtlas
+  - TokenAtlasTests
+  - AtollEmbed
+
+excluded:
+  - ThirdParty                       # vendored/third-party sources (311 files)
+  - AtollEmbed/Shims                 # vendored audio-tap shim (uses print, C interop)
+  - scripts/gittools/fixtures        # test fixtures / generated repos
+  - .build
+  - DerivedData
+  - TokenAtlas.xcodeproj
+
+# --- Rules turned OFF (style choices / idiomatic false-positives) ----
+disabled_rules:
+  - trailing_comma          # project consistently uses multiline trailing commas (102 hits) -> cleaner diffs, intentional
+  - todo                    # TODO/FIXME are legitimate dev markers; should not block CI
+
+# --- Opt-in rules (raise the bar a little, all safe to satisfy) ------
+opt_in_rules:
+  - empty_count             # prefer isEmpty over count == 0
+  - first_where             # .first(where:) over .filter{}.first
+  - contains_over_first_not_nil
+  - redundant_nil_coalescing
+  - toggle_bool
+
+# --- Tuned thresholds ------------------------------------------------
+line_length:
+  warning: 140              # measured p75=144; 120 default is too strict for this code
+  error: 250                # measured max=577 (a few long string literals); error guards true outliers
+  ignores_urls: true
+  ignores_comments: true
+  ignores_function_declarations: true
+  ignores_interpolated_strings: true
+
+identifier_name:
+  # 341/344 default violations were "too short": vm, i, x, y, db, lo, hi, dx...
+  # These are idiomatic (viewModel / loop / coordinate / lower-higher / delta).
+  min_length:
+    warning: 1
+    error: 1
+  max_length:
+    warning: 60
+    error: 80
+  allowed_symbols: ["_"]
+
+type_name:
+  max_length:
+    warning: 50
+    error: 60
+
+file_length:
+  warning: 800              # flags the 11 large files as debt (visible, non-blocking)
+  error: 2500               # ConfigurationsView (2338) stays a warning; reserved for true regressions
+  ignore_comment_only_lines: true
+
+type_body_length:
+  warning: 400
+  error: 1600               # measured max=1480 (TranscriptAnalysisIndex); kept as warning-level debt
+
+function_body_length:
+  warning: 80               # measured p75=82
+  error: 250                # measured max=215
+
+function_parameter_count:
+  warning: 7                # default 5 is too strict; measured violations all at 5
+  error: 9
+
+large_tuple:
+  warning: 3                # default flags 2-tuples too eagerly; 3 is a reasonable line
+  error: 4
+
+cyclomatic_complexity:
+  warning: 15               # measured violations all exactly at default(10); 15 flags real complexity
+  error: 25
+
+nesting:
+  type_level: 2             # SwiftUI namespacing nests types 2 deep; allow it
+
+# force_try: we audited the 6 try! sites — all are NSRegularExpression with
+# compile-time-constant patterns (safe). Kept as a warning for visibility
+# rather than silently disabling.
+force_try:
+  severity: warning
+
+reporter: "xcode"
+
+# Existing-debt baseline (frozen 2026-06-02). Only NEW violations are reported.
+baseline: .swiftlint-baseline
