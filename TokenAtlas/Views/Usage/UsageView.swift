@@ -52,7 +52,9 @@ struct UsageView: View {
                 HStack(spacing: 0) {
                     ForEach(Array(StatsPeriod.allCases.enumerated()), id: \.element) { idx, p in
                         if idx > 0 { Spacer(minLength: 8) }
-                        PeriodTab(period: p, isSelected: vm.period == p) { vm.period = p }
+                        PeriodTab(period: p, isSelected: vm.period == p) {
+                            selectInteractivePeriod(p)
+                        }
                     }
                 }
             }
@@ -68,7 +70,13 @@ struct UsageView: View {
 
         if interactive {
             AppScrollView { content }
-                .onAppear { refreshDerivedData() }
+                .onAppear {
+                    syncInteractivePeriodFromMenuBar()
+                    refreshDerivedData()
+                }
+                .onChange(of: env.preferences.menuBarPeriod) { _, _ in
+                    syncInteractivePeriodFromMenuBar()
+                }
                 .onChange(of: usageDataKey) { _, _ in refreshDerivedData() }
         } else {
             content
@@ -144,6 +152,16 @@ struct UsageView: View {
             provider: env.preferences.selectedProvider,
             lastRefreshedAt: env.store.lastRefreshedAt
         )
+    }
+
+    private func selectInteractivePeriod(_ period: StatsPeriod) {
+        vm.period = period
+        env.preferences.menuBarPeriod = MenuBarPeriod(statsPeriod: period)
+    }
+
+    private func syncInteractivePeriodFromMenuBar() {
+        guard let period = env.preferences.menuBarPeriod.statsPeriod else { return }
+        vm.period = period
     }
 
     private func statCell(_ title: String, _ value: String) -> some View {

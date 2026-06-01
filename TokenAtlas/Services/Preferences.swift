@@ -1,6 +1,10 @@
 import Foundation
 import Observation
 
+extension Notification.Name {
+    static let menuBarDisplayNeedsRefresh = Notification.Name("TokenAtlas.menuBarDisplayNeedsRefresh")
+}
+
 /// What the menu-bar status item shows.
 enum MenuBarMetric: String, CaseIterable, Sendable, Identifiable {
     case tokens
@@ -43,10 +47,16 @@ final class Preferences {
         didSet { defaults.set(autoRefreshMinutes, forKey: Keys.autoRefreshMinutes) }
     }
     var menuBarMetric: MenuBarMetric {
-        didSet { defaults.set(menuBarMetric.rawValue, forKey: Keys.menuBarMetric) }
+        didSet {
+            defaults.set(menuBarMetric.rawValue, forKey: Keys.menuBarMetric)
+            refreshMenuBarDisplayIfChanged(from: oldValue, to: menuBarMetric)
+        }
     }
     var menuBarPeriod: MenuBarPeriod {
-        didSet { defaults.set(menuBarPeriod.rawValue, forKey: Keys.menuBarPeriod) }
+        didSet {
+            defaults.set(menuBarPeriod.rawValue, forKey: Keys.menuBarPeriod)
+            refreshMenuBarDisplayIfChanged(from: oldValue, to: menuBarPeriod)
+        }
     }
     /// Whether token totals shown in the app (Usage stats, BY MODEL, sessions
     /// list) include `cache_read` tokens. On by default — `cache_read` is what
@@ -61,13 +71,19 @@ final class Preferences {
     /// stable baseline; detailed billing applies only billable details that
     /// transcripts expose explicitly.
     var costEstimationMode: CostEstimationMode {
-        didSet { defaults.set(costEstimationMode.rawValue, forKey: Keys.costEstimationMode) }
+        didSet {
+            defaults.set(costEstimationMode.rawValue, forKey: Keys.costEstimationMode)
+            refreshMenuBarDisplayIfChanged(from: oldValue, to: costEstimationMode)
+        }
     }
     /// Same setting, but specifically for the menu-bar status item. Independent
     /// so users can keep the app totals canonical while the menu bar shows a
     /// less inflated figure (or vice versa).
     var menuBarIncludesCache: Bool {
-        didSet { defaults.set(menuBarIncludesCache, forKey: Keys.menuBarIncludesCache) }
+        didSet {
+            defaults.set(menuBarIncludesCache, forKey: Keys.menuBarIncludesCache)
+            refreshMenuBarDisplayIfChanged(from: oldValue, to: menuBarIncludesCache)
+        }
     }
     /// Optional floating edge tab used as a backup entry point when the macOS
     /// menu bar is crowded.
@@ -153,7 +169,10 @@ final class Preferences {
     }
     /// The platform currently being viewed. Always a member of ``enabledProviders``.
     var selectedProvider: ProviderKind {
-        didSet { defaults.set(selectedProvider.rawValue, forKey: Keys.selectedProvider) }
+        didSet {
+            defaults.set(selectedProvider.rawValue, forKey: Keys.selectedProvider)
+            refreshMenuBarDisplayIfChanged(from: oldValue, to: selectedProvider)
+        }
     }
     /// When off, the app forgets ``selectedProvider`` on launch and starts on
     /// the first enabled platform.
@@ -240,10 +259,17 @@ final class Preferences {
         effectiveCodingSurfaceBundleIDs.union(effectiveCLIHostBundleIDs)
     }
 
-    private let defaults: UserDefaults
+    /// Incremented when a preference that affects the system status-item title
+    /// changes. `MenuBarExtra` labels can otherwise wait for the timer tick
+    /// before AppKit redraws the title.
+    private(set) var menuBarDisplayRevision = 0
 
-    init(defaults: UserDefaults = .standard) {
+    private let defaults: UserDefaults
+    private let notificationCenter: NotificationCenter
+
+    init(defaults: UserDefaults = .standard, notificationCenter: NotificationCenter = .default) {
         self.defaults = defaults
+        self.notificationCenter = notificationCenter
         appLanguagePreference = AppLanguagePreference(rawValue: defaults.string(forKey: Keys.appLanguagePreference) ?? "") ?? .system
         autoRefreshMinutes = (defaults.object(forKey: Keys.autoRefreshMinutes) as? Int) ?? 5
         menuBarMetric = MenuBarMetric(rawValue: defaults.string(forKey: Keys.menuBarMetric) ?? "") ?? .tokens
@@ -324,6 +350,12 @@ final class Preferences {
             selectedProvider = firstEnabled
         }
         appLanguagePreference.applyToAppleLanguages(defaults: defaults)
+    }
+
+    private func refreshMenuBarDisplayIfChanged<T: Equatable>(from oldValue: T, to newValue: T) {
+        guard oldValue != newValue else { return }
+        menuBarDisplayRevision &+= 1
+        notificationCenter.post(name: .menuBarDisplayNeedsRefresh, object: nil)
     }
 
     private func persistNotchIslandScreenStyles() {

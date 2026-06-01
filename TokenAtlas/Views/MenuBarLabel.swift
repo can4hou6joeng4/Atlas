@@ -21,11 +21,15 @@ struct MenuBarLabel: View {
                 .monospacedDigit()
                 .stxNumericValueTransition(value: value)
         }
+        .id(prefs.menuBarDisplayRevision)
         .lineLimit(1)
         .fixedSize()
         .help("\(prefs.selectedProvider.displayName) · \(prefs.menuBarPeriod.displayName) · \(value)")
         .accessibilityLabel("\(prefs.selectedProvider.shortName) Stats — \(prefs.menuBarPeriod.displayName)")
         .onReceive(timer) { now = $0 }
+        .onReceive(NotificationCenter.default.publisher(for: .menuBarDisplayNeedsRefresh)) { _ in
+            now = .now
+        }
     }
 
     private func valueText(summary: UsageSummary, metric: MenuBarMetric) -> String {

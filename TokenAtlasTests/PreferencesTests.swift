@@ -17,14 +17,76 @@ struct PreferencesTests {
     func menuBarPeriodPersistsAndFallsBack() {
         let defaults = makeDefaults()
         let prefs = Preferences(defaults: defaults)
+        let initialRevision = prefs.menuBarDisplayRevision
         prefs.menuBarPeriod = .allTime
 
         let reloaded = Preferences(defaults: defaults)
         #expect(reloaded.menuBarPeriod == .allTime)
+        #expect(prefs.menuBarDisplayRevision == initialRevision + 1)
 
         defaults.set("forever", forKey: "menuBarPeriod")
         let invalid = Preferences(defaults: defaults)
         #expect(invalid.menuBarPeriod == .today)
+    }
+
+    @Test("Menu bar display revision tracks only status item display preferences")
+    func menuBarDisplayRevisionTracksStatusItemPreferences() {
+        let defaults = makeDefaults()
+        let prefs = Preferences(defaults: defaults)
+
+        #expect(prefs.menuBarDisplayRevision == 0)
+
+        prefs.menuBarPeriod = .last7Days
+        #expect(prefs.menuBarDisplayRevision == 1)
+
+        prefs.menuBarMetric = .cost
+        #expect(prefs.menuBarDisplayRevision == 2)
+
+        prefs.costEstimationMode = .detailedBilling
+        #expect(prefs.menuBarDisplayRevision == 3)
+
+        prefs.menuBarIncludesCache = false
+        #expect(prefs.menuBarDisplayRevision == 4)
+
+        prefs.selectedProvider = .codex
+        #expect(prefs.menuBarDisplayRevision == 5)
+
+        prefs.menuBarPeriod = .last7Days
+        #expect(prefs.menuBarDisplayRevision == 5)
+
+        prefs.autoRefreshMinutes = 10
+        #expect(prefs.menuBarDisplayRevision == 5)
+    }
+
+    @Test("Menu bar display refresh notification posts for visible menu bar preferences")
+    func menuBarDisplayRefreshNotificationPosts() {
+        let defaults = makeDefaults()
+        let center = NotificationCenter()
+        let counter = NotificationCounter()
+        let prefs = Preferences(defaults: defaults, notificationCenter: center)
+        let token = center.addObserver(
+            forName: .menuBarDisplayNeedsRefresh,
+            object: nil,
+            queue: nil
+        ) { _ in
+            counter.increment()
+        }
+        defer { center.removeObserver(token) }
+
+        prefs.menuBarPeriod = .last30Days
+        #expect(counter.value == 1)
+
+        prefs.menuBarMetric = .cost
+        #expect(counter.value == 2)
+
+        prefs.menuBarIncludesCache = false
+        #expect(counter.value == 3)
+
+        prefs.selectedProvider = .codex
+        #expect(counter.value == 4)
+
+        prefs.autoRefreshMinutes = 8
+        #expect(counter.value == 4)
     }
 
     @Test("Menu bar usage period reads legacy stats period values")
@@ -281,5 +343,22 @@ struct PreferencesTests {
         let defaults = UserDefaults(suiteName: suiteName) ?? .standard
         defaults.removePersistentDomain(forName: suiteName)
         return defaults
+    }
+}
+
+private final class NotificationCounter: @unchecked Sendable {
+    private let lock = NSLock()
+    private var count = 0
+
+    func increment() {
+        lock.lock()
+        defer { lock.unlock() }
+        count += 1
+    }
+
+    var value: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return count
     }
 }

@@ -13,6 +13,19 @@ enum MenuBarPeriod: String, CaseIterable, Codable, Sendable, Identifiable, Hasha
 
     var id: String { rawValue }
 
+    init(statsPeriod: StatsPeriod) {
+        switch statsPeriod {
+        case .today:
+            self = .today
+        case .last7Days:
+            self = .last7Days
+        case .last30Days:
+            self = .last30Days
+        case .allTime:
+            self = .allTime
+        }
+    }
+
     var displayName: String {
         switch self {
         case .currentSession: "Current session"
