@@ -25,7 +25,7 @@ struct MainUsageView: View {
         AppScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header(provider: provider)
-                controls(period: $bvm.period)
+                controls(period: usagePeriodBinding)
                 UsageSummaryCards(
                     summary: summary,
                     includeCacheInTokens: includeCache,
@@ -58,9 +58,13 @@ struct MainUsageView: View {
         }
         .onAppear {
             syncFromSceneStorage()
+            syncUsagePeriodFromMenuBar()
             refreshDerivedData()
         }
         .onChange(of: vm.period) { _, new in periodRaw = new.rawValue }
+        .onChange(of: env.preferences.menuBarPeriod) { _, _ in
+            syncUsagePeriodFromMenuBar()
+        }
         .onChange(of: vm.chartStyle) { _, new in chartStyleRaw = ChartStyleStorage(new).rawValue }
         .onChange(of: vm.scaleMode) { _, new in scaleModeRaw = ScaleModeStorage(new).rawValue }
         .onChange(of: vm.stackByType) { _, new in stackByTypeRaw = new }
@@ -91,6 +95,13 @@ struct MainUsageView: View {
             UsagePeriodChips(period: period)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    private var usagePeriodBinding: Binding<StatsPeriod> {
+        Binding(
+            get: { vm.period },
+            set: { selectUsagePeriod($0) }
+        )
     }
 
     @ViewBuilder
@@ -135,6 +146,14 @@ struct MainUsageView: View {
         vm.chartStyle = ChartStyleStorage(rawValue: chartStyleRaw)?.chartStyle ?? .line
         vm.scaleMode = ScaleModeStorage(rawValue: scaleModeRaw)?.scaleMode ?? .linear
         vm.stackByType = stackByTypeRaw
+    }
+
+    private func selectUsagePeriod(_ period: StatsPeriod) {
+        vm.selectPeriod(period, syncingMenuBarPeriodIn: env.preferences)
+    }
+
+    private func syncUsagePeriodFromMenuBar() {
+        vm.syncPeriodFromMenuBar(env.preferences.menuBarPeriod)
     }
 
     private func refreshDerivedData() {

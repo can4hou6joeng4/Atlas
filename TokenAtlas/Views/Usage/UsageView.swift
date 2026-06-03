@@ -155,13 +155,11 @@ struct UsageView: View {
     }
 
     private func selectInteractivePeriod(_ period: StatsPeriod) {
-        vm.period = period
-        env.preferences.menuBarPeriod = MenuBarPeriod(statsPeriod: period)
+        vm.selectPeriod(period, syncingMenuBarPeriodIn: env.preferences)
     }
 
     private func syncInteractivePeriodFromMenuBar() {
-        guard let period = env.preferences.menuBarPeriod.statsPeriod else { return }
-        vm.period = period
+        vm.syncPeriodFromMenuBar(env.preferences.menuBarPeriod)
     }
 
     private func statCell(_ title: String, _ value: String) -> some View {

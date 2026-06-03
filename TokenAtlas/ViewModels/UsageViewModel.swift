@@ -74,6 +74,16 @@ final class UsageViewModel {
         derivedData = UsageDerivedData.make(key: key, store: store)
     }
 
+    func selectPeriod(_ period: StatsPeriod, syncingMenuBarPeriodIn preferences: Preferences) {
+        self.period = period
+        preferences.menuBarPeriod = MenuBarPeriod(statsPeriod: period)
+    }
+
+    func syncPeriodFromMenuBar(_ menuBarPeriod: MenuBarPeriod) {
+        guard let period = menuBarPeriod.statsPeriod else { return }
+        self.period = period
+    }
+
     func displayedDerivedData(provider: ProviderKind, lastRefreshedAt: Date?) -> UsageDerivedData {
         let key = UsageDerivedData.Key(period: period, provider: provider, lastRefreshedAt: lastRefreshedAt)
         guard let derivedData, derivedData.key == key else {

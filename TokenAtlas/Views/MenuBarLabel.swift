@@ -8,37 +8,25 @@ struct MenuBarLabel: View {
     private let timer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        let prefs = env.preferences
-        let summary = env.store.summary(
-            for: prefs.menuBarPeriod,
-            provider: prefs.selectedProvider,
+        let snapshot = MenuBarStatusSnapshot(
+            preferences: env.preferences,
+            store: env.store,
             now: now
         )
-        let value = valueText(summary: summary, metric: prefs.menuBarMetric)
         HStack(spacing: 4) {
             Image(systemName: "chart.bar.xaxis")
-            Text(value)
+            Text(snapshot.displayValue)
                 .monospacedDigit()
-                .stxNumericValueTransition(value: value)
+                .stxNumericValueTransition(value: snapshot.displayValue)
         }
-        .id(prefs.menuBarDisplayRevision)
+        .id(env.preferences.menuBarDisplayRevision)
         .lineLimit(1)
         .fixedSize()
-        .help("\(prefs.selectedProvider.displayName) · \(prefs.menuBarPeriod.displayName) · \(value)")
-        .accessibilityLabel("\(prefs.selectedProvider.shortName) Stats — \(prefs.menuBarPeriod.displayName)")
+        .help(snapshot.helpText)
+        .accessibilityLabel(snapshot.accessibilityLabel)
         .onReceive(timer) { now = $0 }
         .onReceive(NotificationCenter.default.publisher(for: .menuBarDisplayNeedsRefresh)) { _ in
             now = .now
-        }
-    }
-
-    private func valueText(summary: UsageSummary, metric: MenuBarMetric) -> String {
-        if env.store.sessions(for: env.preferences.selectedProvider).isEmpty && env.store.isLoading { return "…" }
-        switch metric {
-        case .tokens:
-            return Format.tokens(summary.totalTokens(includingCacheRead: env.preferences.menuBarIncludesCache))
-        case .cost:
-            return Format.cost(summary.totalCost(for: env.preferences.costEstimationMode))
         }
     }
 }
