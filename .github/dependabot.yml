@@ -1,0 +1,15 @@
+# Dependabot configuration — https://docs.github.com/code-security/dependabot
+# Keeps GitHub Actions used by the CI/release workflows up to date.
+# Note: this project has no top-level Package.swift, so no Swift Package
+# ecosystem is configured here.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5
