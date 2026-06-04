@@ -12,7 +12,7 @@ cd "$(dirname "$0")/.."
 DERIVED=/tmp/TokenAtlas-build
 APP="$DERIVED/Build/Products/Debug/TokenAtlas.app"
 APP_PROCESS_PATTERN="TokenAtlas.app/Contents/MacOS/TokenAtlas"
-LEGACY_APP_PROCESS_PATTERN="Claude Stats.app/Contents/MacOS/Claude Stats"
+APP_HELPER_PROCESS_PATTERN="TokenAtlas.app/Contents/Resources/mediaremote-adapter.pl"
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 require_apple_silicon() {
@@ -23,7 +23,7 @@ require_apple_silicon() {
 }
 
 running_app_pids() {
-    pgrep -f "$APP_PROCESS_PATTERN|$LEGACY_APP_PROCESS_PATTERN" 2>/dev/null || true
+    pgrep -f "$APP_PROCESS_PATTERN|$APP_HELPER_PROCESS_PATTERN" 2>/dev/null || true
 }
 
 wait_until_stopped() {
@@ -46,7 +46,7 @@ stop_running_app() {
         return 0
     fi
 
-    echo "==> Stopping existing TokenAtlas/legacy Claude Stats process(es): $(echo "$pids" | tr '\n' ' ')"
+    echo "==> Stopping existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')"
     kill -TERM $pids 2>/dev/null || true
     if wait_until_stopped 30; then
         return 0
@@ -60,7 +60,7 @@ stop_running_app() {
     fi
 
     pids="$(running_app_pids)"
-    echo "error: unable to stop existing TokenAtlas/legacy Claude Stats process(es): $(echo "$pids" | tr '\n' ' ')" >&2
+    echo "error: unable to stop existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')" >&2
     return 1
 }
 
@@ -74,8 +74,6 @@ unregister_bundle_if_present() {
 
 cleanup_stale_registrations() {
     unregister_bundle_if_present "/Applications/TokenAtlas.app"
-    unregister_bundle_if_present "/Applications/Claude Stats.app"
-    unregister_bundle_if_present "/tmp/Codex-stats-build/Build/Products/Debug/Claude Stats.app"
     unregister_bundle_if_present "/tmp/token-atlas-build/Build/Products/Debug/TokenAtlas.app"
     unregister_bundle_if_present "/tmp/TokenAtlas-build-tests/Build/Products/Debug/TokenAtlas.app"
 }

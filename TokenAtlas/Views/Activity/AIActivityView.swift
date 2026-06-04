@@ -218,7 +218,10 @@ struct AIActivityView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.small)
-                Button("Re-check") { vm.bumpReload() }
+                Button("Re-check") {
+                    vm.refreshPermissionState()
+                    vm.bumpReload()
+                }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
             }

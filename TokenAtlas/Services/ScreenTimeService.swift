@@ -41,9 +41,12 @@ struct ScreenTimeService: Sendable {
     /// Whether the Knowledge DB can actually be read right now. (`sqlite3_open`
     /// alone lies — it opens lazily — so this runs a trivial query.)
     static func canRead() -> Bool {
+        guard let copy = makeReadableCopy() else { return false }
+        defer { try? FileManager.default.removeItem(at: copy.directory) }
+
         var db: OpaquePointer?
         defer { sqlite3_close(db) }
-        guard sqlite3_open_v2(databaseURL.path, &db, SQLITE_OPEN_READONLY, nil) == SQLITE_OK, let db else {
+        guard sqlite3_open_v2(copy.database.path, &db, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK, let db else {
             return false
         }
         var stmt: OpaquePointer?

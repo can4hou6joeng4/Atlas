@@ -150,10 +150,13 @@ struct MainUsageView: View {
 
     private func selectUsagePeriod(_ period: StatsPeriod) {
         vm.selectPeriod(period, syncingMenuBarPeriodIn: env.preferences)
+        refreshDerivedData()
+        Task { await env.store.refresh() }
     }
 
     private func syncUsagePeriodFromMenuBar() {
         vm.syncPeriodFromMenuBar(env.preferences.menuBarPeriod)
+        refreshDerivedData()
     }
 
     private func refreshDerivedData() {

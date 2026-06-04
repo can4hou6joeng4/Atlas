@@ -20,7 +20,7 @@ struct ProviderSwitcherBar: View {
                             isSelected: kind == env.preferences.selectedProvider,
                             interactive: interactive
                         ) {
-                            if env.preferences.selectedProvider != kind { env.preferences.selectedProvider = kind }
+                            selectProvider(kind)
                         }
                     }
                 }
@@ -34,6 +34,12 @@ struct ProviderSwitcherBar: View {
         .padding(.top, 9)
         .padding(.bottom, 5)
         .animation(.easeOut(duration: 0.18), value: env.preferences.selectedProvider)
+    }
+
+    private func selectProvider(_ kind: ProviderKind) {
+        guard env.preferences.selectedProvider != kind else { return }
+        env.preferences.selectedProvider = kind
+        Task { await env.store.refresh() }
     }
 }
 
