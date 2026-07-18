@@ -4,14 +4,14 @@ import Testing
 
 @Suite("Release History Catalog")
 struct ReleaseHistoryCatalogTests {
-    @Test("Entries describe the reset product baseline")
+    @Test("Entries track generated releases on top of the reset baseline")
     func entriesCoverReleaseHistory() {
         let entries = ReleaseHistoryCatalog.entries
 
-        #expect(entries.count == 1)
+        #expect(!entries.isEmpty)
         #expect(entries.first?.version == Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String)
-        #expect(entries.first?.version == "1.0.0")
-        #expect(entries.first?.headline == "重新定位为精简后的新产品起点")
+        #expect(entries.last?.version == "1.0.0")
+        #expect(entries.last?.headline == "重新定位为精简后的新产品起点")
         #expect(Set(entries.map(\.id)).count == entries.count)
         #expect(entries.allSatisfy { entry in
             !entry.headline.isEmpty
