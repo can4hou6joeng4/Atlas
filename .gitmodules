@@ -4,4 +4,4 @@
 	branch = integration/atlas
 [submodule "ThirdParty/CppJieba"]
 	path = ThirdParty/CppJieba
-	url = https://github.com/can4hou6joeng4/cppjieba.git
+	url = https://github.com/yanyiwu/cppjieba.git
