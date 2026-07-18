@@ -3,6 +3,14 @@
 extension ReleaseHistoryCatalog {
     static let generatedEntries: [ReleaseHistoryEntry] = [
         ReleaseHistoryEntry(
+            version: "1.2.0",
+            date: "July 19, 2026",
+            headline: "Usage 增加按 tool/skill 的 token 归因",
+            changes: [
+                "ReleaseHistory 断言适配持续发布条目",
+            ]
+        ),
+        ReleaseHistoryEntry(
             version: "1.1.0",
             date: "July 18, 2026",
             headline: "修复子模块远端指向(重建 Atoll fork,CppJieba 改指上游)",
