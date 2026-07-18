@@ -8,6 +8,10 @@ struct UsageSummary: Sendable, Hashable {
     let messageCount: Int
     /// Hourly per-model buckets for the sessions counted in this period.
     let timeline: [ModelBucket]
+    /// Approximate by-tool / by-skill attribution over the same deduped,
+    /// in-scope turns as ``models``. Only populated from sessions carrying
+    /// ``SessionStats/billableMessages`` (Claude); empty otherwise.
+    let toolBreakdown: ToolUsageBreakdown
 
     var totalUsage: TokenUsage { models.reduce(.zero) { $0 + $1.usage } }
     var totalTokens: Int { totalUsage.total }
@@ -22,7 +26,7 @@ struct UsageSummary: Sendable, Hashable {
     }
 
     static func empty(period: StatsPeriod) -> UsageSummary {
-        UsageSummary(period: period, sessionCount: 0, models: [], messageCount: 0, timeline: [])
+        UsageSummary(period: period, sessionCount: 0, models: [], messageCount: 0, timeline: [], toolBreakdown: .empty)
     }
 
     /// Build a summary from already-parsed sessions.
@@ -56,7 +60,8 @@ struct UsageSummary: Sendable, Hashable {
             sessionCount: aggregate.sessionCount,
             models: aggregate.models,
             messageCount: aggregate.messageCount,
-            timeline: aggregate.timeline
+            timeline: aggregate.timeline,
+            toolBreakdown: aggregate.toolBreakdown
         )
     }
 
@@ -84,7 +89,8 @@ struct UsageSummary: Sendable, Hashable {
             sessionCount: aggregate.sessionCount,
             models: aggregate.models,
             messageCount: aggregate.messageCount,
-            timeline: aggregate.timeline
+            timeline: aggregate.timeline,
+            toolBreakdown: aggregate.toolBreakdown
         )
     }
 
@@ -98,6 +104,7 @@ struct UsageSummary: Sendable, Hashable {
         let models: [ModelUsage]
         let messageCount: Int
         let timeline: [ModelBucket]
+        let toolBreakdown: ToolUsageBreakdown
     }
 
     /// Walk `sessions` and aggregate per-model token totals, cost, and the
@@ -118,6 +125,7 @@ struct UsageSummary: Sendable, Hashable {
         var seen: Set<String> = []
         var countedSessions: Set<String> = []
         var messageCount = 0
+        var toolBreakdown = ToolUsageBreakdown.Builder()
 
         for session in sessions {
             guard let stats = session.stats else { continue }
@@ -137,6 +145,7 @@ struct UsageSummary: Sendable, Hashable {
                     acc.usage += bill.usage
                     acc.cost += bill.cost
                     perModel[bill.model] = acc
+                    toolBreakdown.add(bill)
                     includedMessages += 1
                     if let date = bill.timestamp, bill.usage.total > 0 {
                         let hour = calendar.dateInterval(of: .hour, for: date)?.start
@@ -222,7 +231,8 @@ struct UsageSummary: Sendable, Hashable {
             sessionCount: countedSessions.count,
             models: models,
             messageCount: messageCount,
-            timeline: timeline
+            timeline: timeline,
+            toolBreakdown: toolBreakdown.build()
         )
     }
 

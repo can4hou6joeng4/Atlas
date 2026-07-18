@@ -29,4 +29,32 @@ struct BillableMessage: Sendable, Hashable {
     /// Used to rebuild the per-hour timeline after dedup. `nil` messages still
     /// contribute to totals but never appear in the timeline.
     let timestamp: Date?
+    /// Names of the tools this turn invoked (`tool_use` content blocks),
+    /// deduped, in first-appearance order. Exact per-tool-call tokens do not
+    /// exist — usage is reported per assistant message — so these names feed
+    /// the approximate "involving" attribution in ``ToolUsageBreakdown``.
+    /// Empty for turns without tool calls and for providers that don't
+    /// populate it (e.g. Codex).
+    let toolNames: [String]
+    /// Skill names extracted from `tool_use` blocks named `Skill`
+    /// (`input.skill`), deduped, in first-appearance order.
+    let skillNames: [String]
+
+    init(
+        hash: String?,
+        model: String,
+        usage: TokenUsage,
+        cost: CostEstimate,
+        timestamp: Date?,
+        toolNames: [String] = [],
+        skillNames: [String] = []
+    ) {
+        self.hash = hash
+        self.model = model
+        self.usage = usage
+        self.cost = cost
+        self.timestamp = timestamp
+        self.toolNames = toolNames
+        self.skillNames = skillNames
+    }
 }

@@ -166,4 +166,52 @@ struct TranscriptParserTests {
         #expect(abs(model.estimatedCost(for: .detailedBilling) - 180.02) < 1e-9)
         #expect(abs(stats.totalCost(for: .detailedBilling) - 180.02) < 1e-9)
     }
+
+    @Test("Collects tool and skill names per assistant turn on billable messages")
+    func collectsToolAndSkillNamesPerTurn() async throws {
+        let dir = try TempDir.make()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let url = dir.appendingPathComponent("session.jsonl")
+        let text = """
+        {"type":"assistant","timestamp":"2026-02-01T00:00:01.000Z","requestId":"r1","message":{"id":"m1","model":"model-a","content":[{"type":"text","text":"just thinking"}],"usage":{"input_tokens":10,"output_tokens":5}}}
+        {"type":"assistant","timestamp":"2026-02-01T00:00:02.000Z","requestId":"r2","message":{"id":"m2","model":"model-a","content":[{"type":"tool_use","id":"t1","name":"Bash","input":{"command":"ls"}},{"type":"tool_use","id":"t2","name":"Read","input":{"file_path":"/tmp/a"}},{"type":"tool_use","id":"t3","name":"Bash","input":{"command":"pwd"}}],"usage":{"input_tokens":20,"output_tokens":10}}}
+        {"type":"assistant","timestamp":"2026-02-01T00:00:03.000Z","requestId":"r3","message":{"id":"m3","model":"model-a","content":[{"type":"text","text":"running the skill"},{"type":"tool_use","id":"t4","name":"Skill","input":{"skill":"code-review","args":"--effort high HEAD"}}],"usage":{"input_tokens":30,"output_tokens":15}}}
+        """
+        try TempDir.write(text, to: url)
+
+        let stats = try #require(await TranscriptParser(pricing: TestPricing.table)
+            .parse(transcriptAt: url, fallbackTitle: "demo"))
+
+        #expect(stats.billableMessages.count == 3)
+        // Pure-reasoning turn: no tool or skill attribution.
+        #expect(stats.billableMessages[0].toolNames.isEmpty)
+        #expect(stats.billableMessages[0].skillNames.isEmpty)
+        // Duplicate Bash collapses; order is first appearance.
+        #expect(stats.billableMessages[1].toolNames == ["Bash", "Read"])
+        #expect(stats.billableMessages[1].skillNames.isEmpty)
+        // Skill invocations land in the tool list AND surface the skill name.
+        #expect(stats.billableMessages[2].toolNames == ["Skill"])
+        #expect(stats.billableMessages[2].skillNames == ["code-review"])
+    }
+
+    @Test("Skill blocks without a decodable skill input keep tool attribution only")
+    func skillBlockWithoutSkillFieldKeepsToolAttribution() async throws {
+        let dir = try TempDir.make()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let url = dir.appendingPathComponent("session.jsonl")
+        let text = """
+        {"type":"assistant","timestamp":"2026-02-01T00:00:01.000Z","requestId":"r1","message":{"id":"m1","model":"model-a","content":[{"type":"tool_use","id":"t1","name":"Skill","input":{"args":"no skill field"}}],"usage":{"input_tokens":10,"output_tokens":5}}}
+        {"type":"assistant","timestamp":"2026-02-01T00:00:02.000Z","requestId":"r2","message":{"id":"m2","model":"model-a","content":[{"type":"tool_use","id":"t2","name":"Skill","input":"not-an-object"}],"usage":{"input_tokens":10,"output_tokens":5}}}
+        """
+        try TempDir.write(text, to: url)
+
+        let stats = try #require(await TranscriptParser(pricing: TestPricing.table)
+            .parse(transcriptAt: url, fallbackTitle: "demo"))
+
+        #expect(stats.billableMessages.count == 2)
+        #expect(stats.billableMessages[0].toolNames == ["Skill"])
+        #expect(stats.billableMessages[0].skillNames.isEmpty)
+        #expect(stats.billableMessages[1].toolNames == ["Skill"])
+        #expect(stats.billableMessages[1].skillNames.isEmpty)
+    }
 }

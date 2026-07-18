@@ -65,6 +65,26 @@ struct UsageSummaryTests {
         ModelUsage(model: name, messageCount: 1, usage: tokens(count), pricing: TestPricing.table)
     }
 
+    /// A Claude-shaped session whose stats carry per-turn billable messages.
+    private func billableSession(_ id: String, _ msgs: [BillableMessage]) -> Session {
+        let when = msgs.compactMap(\.timestamp).max() ?? .now
+        let modelUsage = ModelUsage(
+            model: "model-a",
+            messageCount: msgs.count,
+            usage: msgs.reduce(.zero) { $0 + $1.usage },
+            costEstimate: msgs.reduce(.zero) { $0 + $1.cost }
+        )
+        let stats = SessionStats(
+            title: id, messageCount: msgs.count,
+            firstActivity: when, lastActivity: when,
+            models: [modelUsage], timeline: [],
+            billableMessages: msgs
+        )
+        return Session(id: id, externalID: id, provider: .claude,
+                       projectDirectoryName: "-p", filePath: "/\(id).jsonl",
+                       cwd: nil, lastModified: when, fileSize: 1, stats: stats)
+    }
+
     @Test("Only sessions inside the [start, end] day range count")
     func filtersByRange() {
         let sessions = [
@@ -360,6 +380,124 @@ struct UsageSummaryTests {
         #expect(summary.totalTokens == 999)
         #expect(summary.timeline.count == 1)
         #expect(summary.timeline.totalTokens == 100)
+    }
+
+    @Test("Tool breakdown attributes whole turns to every involved tool, with a trailing No-tools bucket")
+    func toolBreakdownUsesInvolvingAttribution() {
+        let when = cal.date(byAdding: .hour, value: -1, to: .now)!
+        let multiToolTurn = BillableMessage(
+            hash: "m1:r1", model: "model-a", usage: tokens(100),
+            cost: CostEstimate(standardAPI: 1.0), timestamp: when,
+            toolNames: ["Bash", "Read"]
+        )
+        let skillTurn = BillableMessage(
+            hash: "m2:r2", model: "model-a", usage: tokens(30),
+            cost: CostEstimate(standardAPI: 0.3), timestamp: when,
+            toolNames: ["Skill"], skillNames: ["code-review"]
+        )
+        let chatTurn = BillableMessage(
+            hash: "m3:r3", model: "model-a", usage: tokens(50),
+            cost: CostEstimate(standardAPI: 0.5), timestamp: when
+        )
+
+        let summary = UsageSummary.make(period: .allTime, sessions: [
+            billableSession("s", [multiToolTurn, skillTurn, chatTurn]),
+        ], pricing: TestPricing.table)
+
+        // Involving attribution repeats turns per row but never inflates the period total.
+        #expect(summary.totalTokens == 180)
+
+        let byTool = summary.toolBreakdown.byTool
+        #expect(byTool.map(\.name) == ["Bash", "Read", "Skill", nil])
+        #expect(byTool[0].usage.total == 100)   // whole multi-tool turn for Bash...
+        #expect(byTool[1].usage.total == 100)   // ...and again for Read
+        #expect(byTool[0].turnCount == 1)
+        #expect(byTool[2].usage.total == 30)
+        #expect(byTool.last?.isNoToolsBucket == true)
+        #expect(byTool.last?.usage.total == 50)
+        #expect(byTool.last?.turnCount == 1)
+        #expect(abs((byTool.last?.cost.value(for: .standardAPI) ?? 0) - 0.5) < 1e-9)
+        #expect(summary.toolBreakdown.hasToolData)
+
+        let bySkill = summary.toolBreakdown.bySkill
+        #expect(bySkill.map(\.name) == ["code-review"])
+        #expect(bySkill[0].usage.total == 30)
+        #expect(bySkill[0].turnCount == 1)
+    }
+
+    @Test("Tool breakdown attributes shared subagent turns once after hash dedup")
+    func toolBreakdownDedupsSharedTurnsByHash() {
+        let when = cal.date(byAdding: .hour, value: -1, to: .now)!
+        let sharedTurn = BillableMessage(
+            hash: "msg_shared:req_1", model: "model-a", usage: tokens(1_000),
+            cost: CostEstimate(standardAPI: 0.5), timestamp: when,
+            toolNames: ["Bash"]
+        )
+
+        let summary = UsageSummary.make(period: .allTime, sessions: [
+            billableSession("parent", [sharedTurn]),
+            billableSession("subagent", [sharedTurn]),
+        ], pricing: TestPricing.table)
+
+        #expect(summary.toolBreakdown.byTool.map(\.name) == ["Bash"])
+        #expect(summary.toolBreakdown.byTool.first?.turnCount == 1)
+        #expect(summary.toolBreakdown.byTool.first?.usage.total == 1_000)
+    }
+
+    @Test("Tool breakdown only counts turns inside the selected period")
+    func toolBreakdownFollowsPeriodScope() {
+        let today = cal.date(byAdding: .hour, value: 1, to: cal.startOfDay(for: .now))!
+        let old = cal.date(byAdding: .day, value: -3, to: today)!
+        let todayTurn = BillableMessage(
+            hash: "t:1", model: "model-a", usage: tokens(100),
+            cost: .zero, timestamp: today, toolNames: ["Read"]
+        )
+        let oldTurn = BillableMessage(
+            hash: "o:1", model: "model-a", usage: tokens(900),
+            cost: .zero, timestamp: old, toolNames: ["Bash"]
+        )
+
+        let summary = UsageSummary.make(period: .today, sessions: [
+            billableSession("mixed", [todayTurn, oldTurn]),
+        ], pricing: TestPricing.table)
+
+        #expect(summary.toolBreakdown.byTool.map(\.name) == ["Read"])
+        #expect(summary.toolBreakdown.byTool.first?.usage.total == 100)
+    }
+
+    @Test("Sessions without billable messages produce an empty tool breakdown")
+    func toolBreakdownEmptyWithoutBillableMessages() {
+        let summary = UsageSummary.make(period: .allTime, sessions: [
+            legacySession("legacy", daysAgo: 0, hour: 10, models: [model("model-a", count: 500)]),
+        ], pricing: TestPricing.table)
+
+        #expect(summary.toolBreakdown.byTool.isEmpty)
+        #expect(summary.toolBreakdown.bySkill.isEmpty)
+        #expect(summary.toolBreakdown.hasToolData == false)
+    }
+
+    @Test("Tool breakdown snapshot computes share against the period total, not the row sum")
+    func toolBreakdownSnapshotShareUsesPeriodTotalDenominator() {
+        let breakdown = ToolUsageBreakdown(
+            byTool: [
+                ToolUsageBreakdown.Row(name: "Bash", turnCount: 1, usage: tokens(100), cost: .zero),
+                ToolUsageBreakdown.Row(name: "Read", turnCount: 1, usage: tokens(100), cost: .zero),
+                ToolUsageBreakdown.Row(name: nil, turnCount: 1, usage: tokens(100), cost: .zero),
+            ],
+            bySkill: []
+        )
+        // One 100-token turn invoked both tools, one 100-token turn none.
+        let snapshot = UsageToolBreakdownSnapshot(key: UsageToolBreakdownSnapshot.Key(
+            breakdown: breakdown,
+            periodTotalUsage: tokens(200),
+            includeCacheInTokens: true,
+            costEstimationMode: .standardAPI
+        ))
+
+        // Involving rows overlap: each is 50% of the period, summing past 100%.
+        #expect(snapshot.toolRows.map(\.shareText) == ["50%", "50%", "50%"])
+        #expect(snapshot.toolRows.last?.isNoTools == true)
+        #expect(snapshot.toolRows.last?.label == L10n.string("usage.tools.no_tools", defaultValue: "No tools"))
     }
 
     @MainActor

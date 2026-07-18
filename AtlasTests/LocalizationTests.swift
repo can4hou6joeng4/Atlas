@@ -79,6 +79,21 @@ struct LocalizationTests {
                             locale: zh) == "正在分析对话")
     }
 
+    @Test("Usage tool breakdown labels are localized")
+    func usageToolBreakdownLabelsAreLocalized() {
+        let zh = Locale(identifier: "zh-Hans")
+
+        #expect(L10n.string("usage.tools.by_tool", defaultValue: "BY TOOL", locale: zh) == "按工具")
+        #expect(L10n.string("usage.tools.by_skill", defaultValue: "BY SKILL", locale: zh) == "按技能")
+        #expect(L10n.string("usage.tools.no_tools", defaultValue: "No tools", locale: zh) == "未用工具")
+        #expect(L10n.string("usage.tools.columns",
+                            defaultValue: "Turns · Tokens · Cost · Share",
+                            locale: zh) == "轮次 · Token · 费用 · 占比")
+        #expect(L10n.string("usage.tools.involving_note",
+                            defaultValue: "Whole-turn usage counts toward every tool the turn invoked; multi-tool turns repeat across rows.",
+                            locale: zh) == "按涉及该工具的轮次汇总整轮用量；多工具轮次会重复计入。")
+    }
+
     @Test("Notch Island settings labels are localized")
     func notchIslandSettingsLabelsAreLocalized() {
         let zh = Locale(identifier: "zh-Hans")

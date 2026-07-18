@@ -63,12 +63,15 @@ struct TranscriptParser: Sendable {
                 } else {
                     hash = nil
                 }
+                let invocations = line.message?.content?.toolInvocations ?? (tools: [], skills: [])
                 billableMessages.append(BillableMessage(
                     hash: hash,
                     model: model,
                     usage: usage,
                     cost: cost,
-                    timestamp: date
+                    timestamp: date,
+                    toolNames: invocations.tools,
+                    skillNames: invocations.skills
                 ))
 
                 if usage.total > 0 {
@@ -314,6 +317,25 @@ private struct TranscriptLine: Decodable {
             guard case .blocks(let blocks) = self, !blocks.isEmpty else { return false }
             return blocks.allSatisfy { $0.isToolBlock }
         }
+
+        /// Tool names invoked by this message's `tool_use` blocks (deduped,
+        /// first-appearance order), plus the skill names for blocks named
+        /// `Skill` (read from `input.skill`). Feeds the approximate by-tool /
+        /// by-skill usage attribution — see ``BillableMessage/toolNames``.
+        var toolInvocations: (tools: [String], skills: [String]) {
+            guard case .blocks(let blocks) = self else { return ([], []) }
+            var tools: [String] = []
+            var skills: [String] = []
+            for block in blocks where block.type == "tool_use" {
+                guard let name = block.name, !name.isEmpty else { continue }
+                if !tools.contains(name) { tools.append(name) }
+                guard name == "Skill",
+                      let skill = block.input?.skill?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      !skill.isEmpty, !skills.contains(skill) else { continue }
+                skills.append(skill)
+            }
+            return (tools, skills)
+        }
     }
 
     struct ContentBlock: Decodable {
@@ -321,6 +343,7 @@ private struct TranscriptLine: Decodable {
         let text: String?
         let name: String?
         let content: BlockContent?
+        let input: ToolInput?
 
         var displayText: String? {
             switch type {
@@ -340,6 +363,26 @@ private struct TranscriptLine: Decodable {
 
         var isToolBlock: Bool {
             type == "tool_use" || type == "tool_result"
+        }
+    }
+
+    /// Lenient view of a `tool_use.input` object. Only the `skill` field is
+    /// read (for blocks named `Skill`); every other tool's parameters are
+    /// skipped, and a malformed / non-object `input` decodes to `nil` skill
+    /// instead of sinking the whole line.
+    struct ToolInput: Decodable {
+        let skill: String?
+
+        private enum CodingKeys: String, CodingKey {
+            case skill
+        }
+
+        init(from decoder: Decoder) throws {
+            guard let container = try? decoder.container(keyedBy: CodingKeys.self) else {
+                skill = nil
+                return
+            }
+            skill = (try? container.decodeIfPresent(String.self, forKey: .skill)) ?? nil
         }
     }
 

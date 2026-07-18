@@ -6995,6 +6995,91 @@
         }
       }
     },
+    "usage.tools.by_skill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BY SKILL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按技能"
+          }
+        }
+      }
+    },
+    "usage.tools.by_tool" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BY TOOL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按工具"
+          }
+        }
+      }
+    },
+    "usage.tools.columns" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turns · Tokens · Cost · Share"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "轮次 · Token · 费用 · 占比"
+          }
+        }
+      }
+    },
+    "usage.tools.involving_note" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whole-turn usage counts toward every tool the turn invoked; multi-tool turns repeat across rows."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按涉及该工具的轮次汇总整轮用量；多工具轮次会重复计入。"
+          }
+        }
+      }
+    },
+    "usage.tools.no_tools" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tools"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未用工具"
+          }
+        }
+      }
+    },
     "usage.trend.help.log_scale" : {
       "extractionState" : "stale",
       "localizations" : {

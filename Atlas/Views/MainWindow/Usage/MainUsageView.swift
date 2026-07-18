@@ -49,6 +49,14 @@ struct MainUsageView: View {
                     costMode: costMode,
                     cacheHitRate: cacheHitRate
                 )
+                if summary.toolBreakdown.hasToolData {
+                    UsageToolBreakdown(
+                        breakdown: summary.toolBreakdown,
+                        periodTotalUsage: summary.totalUsage,
+                        includeCacheInTokens: includeCache,
+                        costEstimationMode: costMode
+                    )
+                }
             }
             .padding(.horizontal, 20)
             .padding(.top, 52)
