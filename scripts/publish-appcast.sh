@@ -28,8 +28,8 @@ BUILD="${2:?usage: publish-appcast.sh <version> <build> <tag>}"
 TAG="${3:?usage: publish-appcast.sh <version> <build> <tag>}"
 : "${SPARKLE_PRIVATE_ED_KEY:?SPARKLE_PRIVATE_ED_KEY is not set}"
 
-REPO="can4hou6joeng4/TokenAtlas"
-FEED_URL="https://can4hou6joeng4.github.io/TokenAtlas/appcast.xml"
+REPO="can4hou6joeng4/Atlas"
+FEED_URL="https://can4hou6joeng4.github.io/Atlas/appcast.xml"
 SPARKLE_TOOLS_VERSION="2.9.1"   # the version of Sparkle CLI tools to download
 SPARKLE_MAX_DELTAS="${SPARKLE_MAX_DELTAS:-3}"
 SPARKLE_DELTA_FORMAT_VERSION="${SPARKLE_DELTA_FORMAT_VERSION:-4}"
@@ -63,10 +63,10 @@ gh_warning() {
 # Sparkle updates from a .zip when one is present (no disk image to mount),
 # otherwise from the .dmg (notarized + stapled in the signed release path).
 ARCHIVE=""
-for candidate in "dist/TokenAtlas-$VERSION.zip" "dist/TokenAtlas-$VERSION.dmg"; do
+for candidate in "dist/Atlas-$VERSION.zip" "dist/Atlas-$VERSION.dmg"; do
     if [[ -f "$candidate" ]]; then ARCHIVE="$candidate"; break; fi
 done
-[[ -n "$ARCHIVE" ]] || { echo "error: no dist/TokenAtlas-$VERSION.{zip,dmg} to sign" >&2; exit 1; }
+[[ -n "$ARCHIVE" ]] || { echo "error: no dist/Atlas-$VERSION.{zip,dmg} to sign" >&2; exit 1; }
 ARCHIVE_NAME="$(basename "$ARCHIVE")"
 echo "==> Signing $ARCHIVE for the appcast"
 
@@ -266,7 +266,7 @@ while IFS=$'\t' read -r OLD_BUILD OLD_DISPLAY OLD_URL; do
         continue
     fi
 
-    DELTA_NAME="TokenAtlas-$BUILD-from-$OLD_BUILD.delta"
+    DELTA_NAME="Atlas-$BUILD-from-$OLD_BUILD.delta"
     DELTA_PATH="dist/$DELTA_NAME"
     PATCHED_DIR="$WORK/patched-$OLD_BUILD"
     PATCHED_APP="$PATCHED_DIR/$(basename "$CURRENT_APP")"

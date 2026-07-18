@@ -1,4 +1,4 @@
-# SwiftLint configuration for TokenAtlas
+# SwiftLint configuration for Atlas
 # =====================================================================
 # Rationale: this config was tuned against the ACTUAL codebase (measured
 # 1131 default violations across 240 files), then relaxed to match the
@@ -9,8 +9,8 @@
 
 # --- Paths -----------------------------------------------------------
 included:
-  - TokenAtlas
-  - TokenAtlasTests
+  - Atlas
+  - AtlasTests
   - AtollEmbed
 
 excluded:
@@ -19,7 +19,7 @@ excluded:
   - scripts/gittools/fixtures        # test fixtures / generated repos
   - .build
   - DerivedData
-  - TokenAtlas.xcodeproj
+  - Atlas.xcodeproj
 
 # --- Rules turned OFF (style choices / idiomatic false-positives) ----
 disabled_rules:

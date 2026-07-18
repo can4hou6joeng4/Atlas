@@ -9,7 +9,7 @@ Current README hero and scenario assets:
 - `social-preview.png` - top README hero and GitHub social preview source image.
 - `token-atlas-icon.png` - app icon used in the README heading and generated
   social-preview composition.
-- `screens/readme-main-overview.png` - primary TokenAtlas dashboard visual.
+- `screens/readme-main-overview.png` - primary Atlas dashboard visual.
 - `screens/readme-usage.png` - Usage scenario visual.
 - `screens/readme-sessions.png` - Sessions scenario visual.
 - `screens/readme-git-activity.png` - Git Activity scenario visual.

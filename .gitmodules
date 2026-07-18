@@ -1,7 +1,7 @@
 [submodule "ThirdParty/Atoll"]
 	path = ThirdParty/Atoll
 	url = https://github.com/can4hou6joeng4/Atoll.git
-	branch = integration/tokenatlas
+	branch = integration/atlas
 [submodule "ThirdParty/CppJieba"]
 	path = ThirdParty/CppJieba
 	url = https://github.com/can4hou6joeng4/cppjieba.git

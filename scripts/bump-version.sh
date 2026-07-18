@@ -6,7 +6,7 @@
 #   [build-number]       e.g. 42      -> CURRENT_PROJECT_VERSION (CFBundleVersion); defaults to 1
 #
 # Pure text substitution — no yq/yaml dependency. Run scripts/generate.sh afterwards
-# to regenerate TokenAtlas.xcodeproj.
+# to regenerate Atlas.xcodeproj.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 

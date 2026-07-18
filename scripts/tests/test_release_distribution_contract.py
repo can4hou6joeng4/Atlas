@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[2]
-INFO_PLIST = REPO / "TokenAtlas" / "App" / "Info.plist"
+INFO_PLIST = REPO / "Atlas" / "App" / "Info.plist"
 PUBLISH_APPCAST = REPO / "scripts" / "publish-appcast.sh"
 UPDATE_APPCAST = REPO / "scripts" / "update-appcast.py"
 RELEASE_BUILD = REPO / "scripts" / "release-build.sh"
@@ -23,7 +23,7 @@ class ReleaseDistributionContractTests(unittest.TestCase):
 
         self.assertEqual(
             info["SUFeedURL"],
-            "https://can4hou6joeng4.github.io/TokenAtlas/appcast.xml",
+            "https://can4hou6joeng4.github.io/Atlas/appcast.xml",
         )
         self.assertRegex(info["SUPublicEDKey"], r"^[A-Za-z0-9+/=]{40,}$")
         self.assertTrue(info["SUEnableAutomaticChecks"])
@@ -53,7 +53,7 @@ class ReleaseDistributionContractTests(unittest.TestCase):
         self.assertIn('ln -s /Applications "$stage/Applications"', script)
         self.assertIn('swift scripts/render-dmg-background.swift "$stage/.background/dmg-background.png"', script)
         self.assertIn("set the bounds of container window to {160, 90, 1520, 930}", script)
-        self.assertIn('set position of item "TokenAtlas.app" to {410, 490}', script)
+        self.assertIn('set position of item "Atlas.app" to {410, 490}', script)
         self.assertIn('set position of item "Applications" to {950, 490}', script)
         self.assertIn('hdiutil convert "$rw_dmg" -format UDZO', script)
 
@@ -61,7 +61,7 @@ class ReleaseDistributionContractTests(unittest.TestCase):
         renderer = read(RENDER_DMG_BACKGROUND)
 
         self.assertIn("static let size = CGSize(width: 1360, height: 840)", renderer)
-        self.assertIn("Drag TokenAtlas to Applications", renderer)
+        self.assertIn("Drag Atlas to Applications", renderer)
         self.assertIn("Future releases arrive through Sparkle updates", renderer)
         self.assertIn("static let appPad = CGRect(x: 300, y: 392, width: 220, height: 196)", renderer)
         self.assertIn("static let applicationsPad = CGRect(x: 840, y: 392, width: 220, height: 196)", renderer)

@@ -1,39 +1,39 @@
 <div align="center">
-  <img src="docs/assets/token-atlas-icon.png" alt="TokenAtlas app icon" width="120" height="120">
-  <h1>TokenAtlas</h1>
-  <p><em>📊 Map your local AI coding usage — tokens, cost, sessions, and Git activity — in one native macOS menu-bar app.</em></p>
+  <img src="docs/assets/token-atlas-icon.png" alt="Atlas app icon" width="120" height="120">
+  <h1>Atlas</h1>
+  <p><em>🗺️ Chart your local AI coding voyage — tokens, cost, sessions, and Git activity — in one native macOS menu-bar app.</em></p>
 </div>
 
 <p align="center">
-  <a href="https://github.com/can4hou6joeng4/TokenAtlas/stargazers"><img src="https://img.shields.io/github/stars/can4hou6joeng4/TokenAtlas?style=flat-square" alt="Stars"></a>
-  <a href="https://github.com/can4hou6joeng4/TokenAtlas/releases"><img src="https://img.shields.io/github/v/release/can4hou6joeng4/TokenAtlas?include_prereleases&label=version&style=flat-square" alt="Version"></a>
-  <a href="https://github.com/can4hou6joeng4/TokenAtlas/actions/workflows/release.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/can4hou6joeng4/TokenAtlas/release.yml?branch=main&style=flat-square" alt="Build"></a>
+  <a href="https://github.com/can4hou6joeng4/Atlas/stargazers"><img src="https://img.shields.io/github/stars/can4hou6joeng4/Atlas?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/can4hou6joeng4/Atlas/releases"><img src="https://img.shields.io/github/v/release/can4hou6joeng4/Atlas?include_prereleases&label=version&style=flat-square" alt="Version"></a>
+  <a href="https://github.com/can4hou6joeng4/Atlas/actions/workflows/release.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/can4hou6joeng4/Atlas/release.yml?branch=main&style=flat-square" alt="Build"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL_v3-blue.svg?style=flat-square" alt="License"></a>
-  <a href="https://github.com/can4hou6joeng4/TokenAtlas/commits/main"><img src="https://img.shields.io/github/commit-activity/m/can4hou6joeng4/TokenAtlas?style=flat-square" alt="Commits"></a>
-  <a href="https://can4hou6joeng4.github.io/TokenAtlas/"><img src="https://img.shields.io/badge/homepage-tokenatlas-f06b1f?style=flat-square&logo=safari&logoColor=white" alt="Homepage"></a>
+  <a href="https://github.com/can4hou6joeng4/Atlas/commits/main"><img src="https://img.shields.io/github/commit-activity/m/can4hou6joeng4/Atlas?style=flat-square" alt="Commits"></a>
+  <a href="https://can4hou6joeng4.github.io/Atlas/"><img src="https://img.shields.io/badge/homepage-atlas-f06b1f?style=flat-square&logo=safari&logoColor=white" alt="Homepage"></a>
   <img src="https://img.shields.io/badge/macOS-14%2B-black?style=flat-square&logo=apple" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Swift-6-orange?style=flat-square&logo=swift&logoColor=white" alt="Swift 6">
 </p>
 
 <p align="center">
-  <img src="docs/assets/social-preview.png" alt="TokenAtlas - local AI coding usage map" width="1000">
+  <img src="docs/assets/social-preview.png" alt="Atlas - local AI coding usage map" width="1000">
 </p>
 
-> 💡 TokenAtlas reads the traces your AI CLIs **already write to disk** — no API keys, no account, no telemetry. It maps tokens, estimated cost, cache activity, sessions, and Git history for **Claude Code, Codex, and more** into one quiet, native macOS menu-bar app. Your data never leaves your Mac.
+> 💡 Atlas reads the traces your AI CLIs **already write to disk** — no API keys, no account, no telemetry. It maps tokens, estimated cost, cache activity, sessions, and Git history for **Claude Code, Codex, and more** into one quiet, native macOS menu-bar app. Your data never leaves your Mac.
 
 ## Demo
 
 <div align="center">
 
-<img src="docs/assets/tokenatlas-promo.gif" alt="TokenAtlas demo — dashboard, usage, and providers at a glance" width="860">
+<img src="docs/assets/tokenatlas-promo.gif" alt="Atlas demo — dashboard, usage, and providers at a glance" width="860">
 
-<p><sub><b>▶ Watch the full 60-second tour</b> (1080p — adds the multi-provider, privacy &amp; CTA scenes): <a href="https://github.com/can4hou6joeng4/TokenAtlas/raw/main/docs/assets/tokenatlas-promo.mp4"><code>tokenatlas-promo.mp4</code></a></sub></p>
+<p><sub><b>▶ Watch the full 60-second tour</b> (1080p — adds the multi-provider, privacy &amp; CTA scenes): <a href="https://github.com/can4hou6joeng4/Atlas/raw/main/docs/assets/tokenatlas-promo.mp4"><code>tokenatlas-promo.mp4</code></a></sub></p>
 
 </div>
 
 ## Table of Contents
 
-- [Why TokenAtlas](#why-tokenatlas)
+- [Why Atlas](#why-atlas)
 - [Features](#features)
 - [Highlights](#highlights)
 - [Quick Start](#quick-start)
@@ -49,11 +49,11 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-## Why TokenAtlas
+## Why Atlas
 
-An **atlas** is a book of sea charts — maps that turn open water into something you can navigate. TokenAtlas does the same for your AI coding: it charts the tokens, cost, sessions, and Git activity you produce every day into a map you can actually read.
+An **atlas** is a book of sea charts — maps that turn open water into something you can navigate. Atlas does the same for your AI coding: it charts the tokens, cost, sessions, and Git activity you produce every day into a map you can actually read.
 
-Part of a nautical family: [Harbor](https://github.com/can4hou6joeng4/Harbor) is where knowledge docks, [Beacon](https://github.com/can4hou6joeng4/Beacon) lights up expiring certificates before they bite, and TokenAtlas charts the voyage.
+Part of a nautical family: [Harbor](https://github.com/can4hou6joeng4/Harbor) is where knowledge docks, [Beacon](https://github.com/can4hou6joeng4/Beacon) lights up expiring certificates before they bite, and Atlas charts the voyage.
 
 ## Features
 
@@ -73,7 +73,7 @@ A quiet utility, not a marketing dashboard: restrained color, stable tables, rea
 Sessions, messages, total tokens, streaks, and peak hours at a glance, with a token trend you can read in a second.
 
 <p align="center">
-  <img src="docs/assets/screens/dashboard-overview.png" alt="TokenAtlas dashboard with sessions, tokens, streaks, and a token trend chart" width="900">
+  <img src="docs/assets/screens/dashboard-overview.png" alt="Atlas dashboard with sessions, tokens, streaks, and a token trend chart" width="900">
 </p>
 
 ### Usage — tokens, cost, cache, and model mix
@@ -136,18 +136,18 @@ Animated GIF demos of the menu-bar HUD live in [`docs/assets/screens`](docs/asse
 
 **Install a packaged build**
 
-1. Open the [latest GitHub Release](https://github.com/can4hou6joeng4/TokenAtlas/releases).
-2. Download `TokenAtlas-<version>.dmg`.
-3. Open the disk image and drag `TokenAtlas.app` to `Applications`.
-4. Launch TokenAtlas — it lives in the menu bar.
+1. Open the [latest GitHub Release](https://github.com/can4hou6joeng4/Atlas/releases).
+2. Download `Atlas-<version>.dmg`.
+3. Open the disk image and drag `Atlas.app` to `Applications`.
+4. Launch Atlas — it lives in the menu bar.
 
 > Unsigned preview builds may need a right-click ▸ **Open** on first launch. See [Installation and Releases](docs/installation.md) for the zip fallback, the update feed, and the maintainer release flow.
 
 **Build from source**
 
 ```bash
-git clone --recursive https://github.com/can4hou6joeng4/TokenAtlas.git
-cd TokenAtlas
+git clone --recursive https://github.com/can4hou6joeng4/Atlas.git
+cd Atlas
 brew install xcodegen
 bash scripts/run-debug.sh
 ```
@@ -166,20 +166,20 @@ bash scripts/run-tests.sh
 
 ## Privacy
 
-TokenAtlas is **local-first**. Core usage stats are read from local tool data such as `~/.claude/projects/` and `~/.codex/sessions/`; optional activity and desktop-limit features may request macOS permissions such as Full Disk Access, Accessibility, or Screen Recording.
+Atlas is **local-first**. Core usage stats are read from local tool data such as `~/.claude/projects/` and `~/.codex/sessions/`; optional activity and desktop-limit features may request macOS permissions such as Full Disk Access, Accessibility, or Screen Recording.
 
-Network-facing features are opt-in or feature-specific: Sparkle checks for updates, provider status views may query public status pages, and browser-backed integrations may authenticate through the browser. Nothing is sent to a hosted TokenAtlas service — there isn't one.
+Network-facing features are opt-in or feature-specific: Sparkle checks for updates, provider status views may query public status pages, and browser-backed integrations may authenticate through the browser. Nothing is sent to a hosted Atlas service — there isn't one.
 
 ## Development
 
-`TokenAtlas.xcodeproj` is generated from [`project.yml`](project.yml) with [XcodeGen](https://github.com/yonaskolb/XcodeGen). Use the helper scripts instead of opening stale build products:
+`Atlas.xcodeproj` is generated from [`project.yml`](project.yml) with [XcodeGen](https://github.com/yonaskolb/XcodeGen). Use the helper scripts instead of opening stale build products:
 
 ```bash
 bash scripts/run-debug.sh    # generate, build Debug, and launch
 bash scripts/run-tests.sh    # Python + XCTest suites
 ```
 
-The debug launcher builds into `/tmp/TokenAtlas-build` and launches by full path. This avoids Launch Services conflicts for the menu-bar (`LSUIElement`) app. For local daily use, install a separate bundle:
+The debug launcher builds into `/tmp/atlas-build` and launches by full path. This avoids Launch Services conflicts for the menu-bar (`LSUIElement`) app. For local daily use, install a separate bundle:
 
 ```bash
 bash scripts/install-app.sh
@@ -194,7 +194,7 @@ git tag v1.2.0
 git push origin v1.2.0
 ```
 
-The release workflow builds the app, packages a drag-install DMG, creates release notes from source commits, publishes archives to GitHub Releases, and updates the public [Sparkle appcast](https://can4hou6joeng4.github.io/TokenAtlas/appcast.xml) when `SPARKLE_PRIVATE_ED_KEY` is configured. Signing and notarization inputs are documented in [`.github/workflows/release.yml`](.github/workflows/release.yml).
+The release workflow builds the app, packages a drag-install DMG, creates release notes from source commits, publishes archives to GitHub Releases, and updates the public [Sparkle appcast](https://can4hou6joeng4.github.io/Atlas/appcast.xml) when `SPARKLE_PRIVATE_ED_KEY` is configured. Signing and notarization inputs are documented in [`.github/workflows/release.yml`](.github/workflows/release.yml).
 
 ## Requirements
 
@@ -205,25 +205,25 @@ The release workflow builds the app, packages a drag-install DMG, creates releas
 ## Project Layout
 
 ```text
-TokenAtlas/       app entry point, providers, services, view models, and SwiftUI views
+Atlas/       app entry point, providers, services, view models, and SwiftUI views
 AtollEmbed/       app-side wrapper for the Atoll / DynamicIsland integration
 ThirdParty/       git submodules for embedded upstream projects
-TokenAtlasTests/  parser, scanner, settings, integration, and feature tests
+AtlasTests/  parser, scanner, settings, integration, and feature tests
 docs/assets/      README images, icons, screenshots, and GIFs
 scripts/          project generation, local run/test, release, and appcast tooling
 ```
 
 ## Design Notes
 
-Quiet by default, dense when needed. TokenAtlas should feel like a native macOS utility rather than a marketing dashboard: restrained color, stable tables, readable numbers, and fast paths to the records that explain a workday.
+Quiet by default, dense when needed. Atlas should feel like a native macOS utility rather than a marketing dashboard: restrained color, stable tables, readable numbers, and fast paths to the records that explain a workday.
 
-Provider-specific behavior lives under `TokenAtlas/Providers/<Provider>/`; shared rendering, formatting, and charts stay in common app layers. Adding a provider should be a provider folder, a `Provider` conformance, and one registry entry — nothing more.
+Provider-specific behavior lives under `Atlas/Providers/<Provider>/`; shared rendering, formatting, and charts stay in common app layers. Adding a provider should be a provider folder, a `Provider` conformance, and one registry entry — nothing more.
 
 ## Open Source
 
-TokenAtlas is released under the [GNU Affero General Public License v3.0](LICENSE). The app also embeds and adapts several major open-source projects:
+Atlas is released under the [GNU Affero General Public License v3.0](LICENSE). The app also embeds and adapts several major open-source projects:
 
-| Project | License | How TokenAtlas uses it |
+| Project | License | How Atlas uses it |
 | --- | --- | --- |
 | [Atoll / DynamicIsland](https://github.com/can4hou6joeng4/Atoll) | GPL-3.0 | Integrated through `AtollEmbed` for the optional Notch Island surface and modules. Its [`NOTICE`](ThirdParty/Atoll/NOTICE) and [`COPYRIGHT_ASSETS`](ThirdParty/Atoll/COPYRIGHT_ASSETS) files remain part of the attribution trail. |
 | [OpenComputerUseKit](https://github.com/iFurySt/open-codex-computer-use) | MIT | Vendored under `ThirdParty/OpenComputerUseKit` for internal app automation runtime support. See [`UPSTREAM.md`](ThirdParty/OpenComputerUseKit/UPSTREAM.md) and the preserved [`LICENSE`](ThirdParty/OpenComputerUseKit/LICENSE). |
@@ -232,25 +232,25 @@ Additional Swift Package Manager dependencies include Sparkle, Defaults, Keyboar
 
 ## Contributors
 
-Thanks to everyone who helps build TokenAtlas. ❤️
+Thanks to everyone who helps build Atlas. ❤️
 
-<a href="https://github.com/can4hou6joeng4/TokenAtlas/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=can4hou6joeng4/TokenAtlas" alt="TokenAtlas contributors" />
+<a href="https://github.com/can4hou6joeng4/Atlas/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=can4hou6joeng4/Atlas" alt="Atlas contributors" />
 </a>
 
 ## Star History
 
 <div align="center">
-  <a href="https://star-history.com/#can4hou6joeng4/TokenAtlas&Date">
-    <img src="https://api.star-history.com/svg?repos=can4hou6joeng4/TokenAtlas&type=Date" alt="TokenAtlas star history" width="640">
+  <a href="https://star-history.com/#can4hou6joeng4/Atlas&Date">
+    <img src="https://api.star-history.com/svg?repos=can4hou6joeng4/Atlas&type=Date" alt="Atlas star history" width="640">
   </a>
 </div>
 
-If TokenAtlas helps you understand your AI coding work, a ⭐ keeps the project visible and motivates continued development.
+If Atlas helps you understand your AI coding work, a ⭐ keeps the project visible and motivates continued development.
 
 ## Contributing
 
-Issues, ideas, and pull requests are welcome — start a thread in [Discussions](https://github.com/can4hou6joeng4/TokenAtlas/discussions) or open an [issue](https://github.com/can4hou6joeng4/TokenAtlas/issues). See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first.
+Issues, ideas, and pull requests are welcome — start a thread in [Discussions](https://github.com/can4hou6joeng4/Atlas/discussions) or open an [issue](https://github.com/can4hou6joeng4/Atlas/issues). See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first.
 
 Before opening a PR, run the checks:
 
@@ -266,4 +266,4 @@ bash scripts/run-debug.sh
 
 ## License
 
-TokenAtlas is open source under [AGPL-3.0](LICENSE). A version you modify and run as a network service must stay open under the same license. If you fork TokenAtlas into your own product, please give it a different name and credit TokenAtlas as the source. With gratitude to the maintainers of every embedded project and Swift package catalogued under [Open Source](#open-source), and to everyone who reports issues or sends a pull request.
+Atlas is open source under [AGPL-3.0](LICENSE). A version you modify and run as a network service must stay open under the same license. If you fork Atlas into your own product, please give it a different name and credit Atlas as the source. With gratitude to the maintainers of every embedded project and Swift package catalogued under [Open Source](#open-source), and to everyone who reports issues or sends a pull request.

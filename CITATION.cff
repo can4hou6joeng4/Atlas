@@ -1,16 +1,16 @@
 cff-version: 1.2.0
-message: "If you use TokenAtlas, please cite it using the metadata below."
-title: TokenAtlas
+message: "If you use Atlas, please cite it using the metadata below."
+title: Atlas
 abstract: >-
-  TokenAtlas is a macOS app that turns the local traces of AI coding work —
+  Atlas is a macOS app that turns the local traces of AI coding work —
   sessions, tokens, costs, repositories, usage limits, and provider status —
   into a single quiet map instead of scattered raw logs and isolated panels.
 type: software
 authors:
   - alias: can4hou6joeng4
     email: can4hou6joeng4@163.com
-url: "https://github.com/can4hou6joeng4/TokenAtlas"
-repository-code: "https://github.com/can4hou6joeng4/TokenAtlas"
+url: "https://github.com/can4hou6joeng4/Atlas"
+repository-code: "https://github.com/can4hou6joeng4/Atlas"
 license: AGPL-3.0-or-later
 version: 1.0.0
 date-released: "2026-06-01"

@@ -14,8 +14,8 @@ build/
 xcuserdata/
 
 # === XcodeGen === #
-# TokenAtlas.xcodeproj is generated from project.yml via `xcodegen generate`.
-TokenAtlas.xcodeproj/
+# Atlas.xcodeproj is generated from project.yml via `xcodegen generate`.
+Atlas.xcodeproj/
 
 # === Swift Package Manager === #
 .build/
@@ -63,11 +63,11 @@ GhosttyEmbed/Resources/*
 !GhosttyEmbed/Resources/.gitkeep
 
 # === Generated language-stat runtime resources === #
-TokenAtlas/Resources/GitTools/bin/*
-TokenAtlas/Resources/GitTools/gems/*
-TokenAtlas/Resources/GitTools/runtime/*
-TokenAtlas/Resources/GitTools/manifest.json
-!TokenAtlas/Resources/GitTools/bin/.gitkeep
+Atlas/Resources/GitTools/bin/*
+Atlas/Resources/GitTools/gems/*
+Atlas/Resources/GitTools/runtime/*
+Atlas/Resources/GitTools/manifest.json
+!Atlas/Resources/GitTools/bin/.gitkeep
 
 # === Design scratch (baoyu-design working dir; shipped assets live in docs/assets) === #
 designs/

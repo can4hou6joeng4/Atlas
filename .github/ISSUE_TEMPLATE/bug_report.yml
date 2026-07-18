@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible TokenAtlas problem.
+description: Report a reproducible Atlas problem.
 title: "bug: "
 labels: ["bug"]
 body:
@@ -40,7 +40,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: TokenAtlas version or commit
+      label: Atlas version or commit
       placeholder: "v1.2.0 or commit SHA"
   - type: input
     id: macos

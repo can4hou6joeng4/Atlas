@@ -26,12 +26,12 @@ import release_notes_lib as rnl
 REPO = Path(__file__).resolve().parent.parent
 HISTORY_DIR = REPO / "release-notes" / "history"
 CHANGELOG = REPO / "CHANGELOG.md"
-REPO_URL = "https://github.com/can4hou6joeng4/TokenAtlas"
+REPO_URL = "https://github.com/can4hou6joeng4/Atlas"
 
 HEADER = """\
 # Changelog
 
-All notable changes to TokenAtlas are documented in this file.
+All notable changes to Atlas are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

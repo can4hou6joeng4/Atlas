@@ -3,14 +3,14 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DERIVED=/tmp/TokenAtlas-build-tests
-TEST_APP="$DERIVED/Build/Products/Debug/TokenAtlas.app"
-APP_PROCESS_PATTERN="TokenAtlas.app/Contents/MacOS/TokenAtlas"
+DERIVED=/tmp/Atlas-build-tests
+TEST_APP="$DERIVED/Build/Products/Debug/Atlas.app"
+APP_PROCESS_PATTERN="Atlas.app/Contents/MacOS/Atlas"
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 require_apple_silicon() {
     if [[ "$(uname -m)" != "arm64" ]]; then
-        echo "error: TokenAtlas now supports Apple Silicon Macs only." >&2
+        echo "error: Atlas now supports Apple Silicon Macs only." >&2
         exit 1
     fi
 }
@@ -39,7 +39,7 @@ stop_running_app() {
         return 0
     fi
 
-    echo "==> Stopping existing TokenAtlas process(es): $(echo "$pids" | tr '\n' ' ')"
+    echo "==> Stopping existing Atlas process(es): $(echo "$pids" | tr '\n' ' ')"
     kill -TERM $pids 2>/dev/null || true
     if wait_until_stopped 30; then
         return 0
@@ -55,8 +55,8 @@ cleanup_test_bundle_registration() {
     if [[ -d "$TEST_APP" ]]; then
         "$LSREGISTER" -u "$TEST_APP" 2>/dev/null || true
     fi
-    if [[ -d "/tmp/token-atlas-build/Build/Products/Debug/TokenAtlas.app" ]]; then
-        "$LSREGISTER" -u "/tmp/token-atlas-build/Build/Products/Debug/TokenAtlas.app" 2>/dev/null || true
+    if [[ -d "/tmp/atlas-build/Build/Products/Debug/Atlas.app" ]]; then
+        "$LSREGISTER" -u "/tmp/atlas-build/Build/Products/Debug/Atlas.app" 2>/dev/null || true
     fi
 }
 
@@ -77,8 +77,8 @@ stop_running_app
 cleanup_test_bundle_registration
 
 xcodebuild \
-    -project TokenAtlas.xcodeproj \
-    -scheme TokenAtlas \
+    -project Atlas.xcodeproj \
+    -scheme Atlas \
     -configuration Debug \
     -derivedDataPath "$DERIVED" \
     -destination 'platform=macOS' \

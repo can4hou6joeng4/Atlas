@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
-# Build a local Release TokenAtlas.app and install it as the machine app.
+# Build a local Release Atlas.app and install it as the machine app.
 #
 # This is for daily local use, not development verification. Keep
-# scripts/run-debug.sh on /tmp/TokenAtlas-build so Launch Services does not mix
+# scripts/run-debug.sh on /tmp/atlas-build so Launch Services does not mix
 # Debug menu-bar bundles with the installed app.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DERIVED="${TOKENATLAS_INSTALL_DERIVED:-/tmp/TokenAtlas-install-build}"
-INSTALL_DIR="${TOKENATLAS_INSTALL_DIR:-/Applications}"
-CONFIGURATION="${TOKENATLAS_INSTALL_CONFIGURATION:-Release}"
+DERIVED="${ATLAS_INSTALL_DERIVED:-/tmp/Atlas-install-build}"
+INSTALL_DIR="${ATLAS_INSTALL_DIR:-/Applications}"
+CONFIGURATION="${ATLAS_INSTALL_CONFIGURATION:-Release}"
 LAUNCH_AFTER_INSTALL=1
-CLEAN_BUILD="${TOKENATLAS_INSTALL_CLEAN:-0}"
+CLEAN_BUILD="${ATLAS_INSTALL_CLEAN:-0}"
 
-APP_PROCESS_PATTERN="TokenAtlas.app/Contents/MacOS/TokenAtlas"
-APP_HELPER_PROCESS_PATTERN="TokenAtlas.app/Contents/Resources/mediaremote-adapter.pl"
+APP_PROCESS_PATTERN="Atlas.app/Contents/MacOS/Atlas"
+APP_HELPER_PROCESS_PATTERN="Atlas.app/Contents/Resources/mediaremote-adapter.pl"
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 usage() {
     cat >&2 <<USAGE
 usage: bash scripts/install-app.sh [--install-dir <dir>] [--configuration <name>] [--clean] [--no-launch]
 
-Builds TokenAtlas and installs it to <dir>/TokenAtlas.app.
+Builds Atlas and installs it to <dir>/Atlas.app.
 
 Defaults:
   --install-dir /Applications
@@ -61,12 +61,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-BUILT_APP="$DERIVED/Build/Products/$CONFIGURATION/TokenAtlas.app"
-INSTALL_APP="$INSTALL_DIR/TokenAtlas.app"
+BUILT_APP="$DERIVED/Build/Products/$CONFIGURATION/Atlas.app"
+INSTALL_APP="$INSTALL_DIR/Atlas.app"
 
 require_apple_silicon() {
     if [[ "$(uname -m)" != "arm64" ]]; then
-        echo "error: TokenAtlas now supports Apple Silicon Macs only." >&2
+        echo "error: Atlas now supports Apple Silicon Macs only." >&2
         exit 1
     fi
 }
@@ -76,7 +76,7 @@ running_app_pids() {
 }
 
 running_installed_app_pids() {
-    pgrep -f "$INSTALL_APP/Contents/MacOS/TokenAtlas" 2>/dev/null || true
+    pgrep -f "$INSTALL_APP/Contents/MacOS/Atlas" 2>/dev/null || true
 }
 
 wait_until_stopped() {
@@ -99,7 +99,7 @@ stop_running_app() {
         return 0
     fi
 
-    echo "==> Stopping existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')"
+    echo "==> Stopping existing Atlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')"
     kill -TERM $pids 2>/dev/null || true
     if wait_until_stopped 30; then
         return 0
@@ -113,7 +113,7 @@ stop_running_app() {
     fi
 
     pids="$(running_app_pids)"
-    echo "error: unable to stop existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')" >&2
+    echo "error: unable to stop existing Atlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')" >&2
     return 1
 }
 
@@ -126,8 +126,8 @@ unregister_bundle_if_present() {
 
 cleanup_stale_registrations() {
     unregister_bundle_if_present "$INSTALL_APP"
-    unregister_bundle_if_present "/tmp/token-atlas-build/Build/Products/Debug/TokenAtlas.app"
-    unregister_bundle_if_present "/tmp/TokenAtlas-build-tests/Build/Products/Debug/TokenAtlas.app"
+    unregister_bundle_if_present "/tmp/atlas-build/Build/Products/Debug/Atlas.app"
+    unregister_bundle_if_present "/tmp/Atlas-build-tests/Build/Products/Debug/Atlas.app"
 }
 
 install_built_app() {
@@ -135,17 +135,17 @@ install_built_app() {
     mkdir -p "$INSTALL_DIR"
 
     local staging
-    staging="$(mktemp -d "${TMPDIR:-/tmp}/token-atlas-install.XXXXXX")"
+    staging="$(mktemp -d "${TMPDIR:-/tmp}/atlas-install.XXXXXX")"
     trap 'rm -rf "$staging"' RETURN
 
     echo "==> Staging install copy"
-    /usr/bin/ditto "$BUILT_APP" "$staging/TokenAtlas.app"
-    bash scripts/verify-arm64-bundle.sh "$staging/TokenAtlas.app"
-    codesign --verify --deep --strict --verbose=2 "$staging/TokenAtlas.app"
+    /usr/bin/ditto "$BUILT_APP" "$staging/Atlas.app"
+    bash scripts/verify-arm64-bundle.sh "$staging/Atlas.app"
+    codesign --verify --deep --strict --verbose=2 "$staging/Atlas.app"
 
     echo "==> Installing $INSTALL_APP"
     rm -rf "$INSTALL_APP"
-    /usr/bin/ditto "$staging/TokenAtlas.app" "$INSTALL_APP"
+    /usr/bin/ditto "$staging/Atlas.app" "$INSTALL_APP"
     "$LSREGISTER" -f -R -trusted "$INSTALL_APP" 2>/dev/null || true
 
     trap - RETURN
@@ -166,14 +166,14 @@ launch_installed_app() {
     done
 
     if [[ -z "$(running_installed_app_pids)" ]]; then
-        echo "error: launch did not produce a TokenAtlas process from $INSTALL_APP" >&2
+        echo "error: launch did not produce an Atlas process from $INSTALL_APP" >&2
         exit 1
     fi
 
     for ((i = 0; i < 24; i++)); do
         sleep 0.25
         if [[ -z "$(running_installed_app_pids)" ]]; then
-            echo "error: installed TokenAtlas process exited during startup verification" >&2
+            echo "error: installed Atlas process exited during startup verification" >&2
             exit 1
         fi
     done
@@ -193,8 +193,8 @@ if [[ "$CLEAN_BUILD" == "1" ]]; then
     rm -rf "$DERIVED"
 fi
 xcodebuild \
-    -project TokenAtlas.xcodeproj \
-    -scheme TokenAtlas \
+    -project Atlas.xcodeproj \
+    -scheme Atlas \
     -configuration "$CONFIGURATION" \
     -derivedDataPath "$DERIVED" \
     ARCHS=arm64 \
@@ -203,7 +203,7 @@ xcodebuild \
     ENABLE_HARDENED_RUNTIME=NO \
     build
 
-ENTITLEMENTS="$(mktemp "${TMPDIR:-/tmp}/token-atlas-install-entitlements.XXXXXX")"
+ENTITLEMENTS="$(mktemp "${TMPDIR:-/tmp}/atlas-install-entitlements.XXXXXX")"
 if ! codesign -d --entitlements :- "$BUILT_APP" > "$ENTITLEMENTS" 2>/dev/null; then
     rm -f "$ENTITLEMENTS"
     ENTITLEMENTS=""

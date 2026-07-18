@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Build a Release TokenAtlas.app and package it for distribution into ./dist/.
+# Build a Release Atlas.app and package it for distribution into ./dist/.
 #
 # Two modes, selected automatically by whether SIGN_IDENTITY is set:
 #
 #   • Signed mode (SIGN_IDENTITY set): codesign with a Developer ID Application
 #     identity + hardened runtime, package a DMG, notarize it with notarytool,
-#     and staple the ticket.  Output: dist/TokenAtlas-<version>.dmg
+#     and staple the ticket.  Output: dist/Atlas-<version>.dmg
 #
 #   • Unsigned mode (SIGN_IDENTITY unset): ad-hoc sign, package both a DMG and a
 #     .zip.  Gatekeeper will warn on first launch (right-click ▸ Open).
-#     Output: dist/TokenAtlas-<version>.dmg and dist/TokenAtlas-<version>.zip
+#     Output: dist/Atlas-<version>.dmg and dist/Atlas-<version>.zip
 #
 # Usage: bash scripts/release-build.sh [version]
 #   [version]  version label for the artifact file names; defaults to the
@@ -31,25 +31,25 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DERIVED=/tmp/token-atlas-release
+DERIVED=/tmp/atlas-release
 DIST="$PWD/dist"
 SIGNED_ENTITLEMENTS="$DIST/signed-entitlements.plist"
 UNSIGNED_ENTITLEMENTS="$DIST/unsigned-entitlements.plist"
 
 VERSION="${1:-$(grep -E '^[[:space:]]*MARKETING_VERSION:' project.yml | head -1 | sed -E 's/.*"([^"]+)".*/\1/')}"
 [[ -n "$VERSION" ]] || { echo "error: could not determine version" >&2; exit 1; }
-DMG="$DIST/TokenAtlas-$VERSION.dmg"
-ZIP="$DIST/TokenAtlas-$VERSION.zip"
+DMG="$DIST/Atlas-$VERSION.dmg"
+ZIP="$DIST/Atlas-$VERSION.zip"
 
 SIGNED=0
 [[ -n "${SIGN_IDENTITY:-}" ]] && SIGNED=1
 
 if [[ "$(uname -m)" != "arm64" ]]; then
-    echo "error: TokenAtlas release builds must run on Apple Silicon." >&2
+    echo "error: Atlas release builds must run on Apple Silicon." >&2
     exit 1
 fi
 
-echo "==> Building TokenAtlas $VERSION (Release, $([[ $SIGNED -eq 1 ]] && echo "signed + notarized" || echo "unsigned"))"
+echo "==> Building Atlas $VERSION (Release, $([[ $SIGNED -eq 1 ]] && echo "signed + notarized" || echo "unsigned"))"
 REQUIRE_LINGUIST_RUNTIME="${REQUIRE_LINGUIST_RUNTIME:-1}" \
 REQUIRE_RELOCATABLE_LINGUIST_RUNTIME="${REQUIRE_RELOCATABLE_LINGUIST_RUNTIME:-1}" \
     bash scripts/build-linguist-runtime.sh
@@ -72,15 +72,15 @@ if [[ $SIGNED -eq 1 ]]; then
         exit 1
     }
     echo "==> Signing with: $SIGN_IDENTITY (hardened runtime)"
-    export TOKENATLAS_PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER:-}"
-    export TOKENATLAS_PROVISIONING_PROFILE="${PROVISIONING_PROFILE:-}"
+    export ATLAS_PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER:-}"
+    export ATLAS_PROVISIONING_PROFILE="${PROVISIONING_PROFILE:-}"
     CONFIGURATION=ReleaseSigned
 else
     XCODE_BUILD_ARGS+=(CODE_SIGN_IDENTITY="-" CODE_SIGN_STYLE=Automatic ENABLE_HARDENED_RUNTIME=NO)
 fi
 
 PRODUCTS="$DERIVED/Build/Products/$CONFIGURATION"
-APP="$PRODUCTS/TokenAtlas.app"
+APP="$PRODUCTS/Atlas.app"
 
 codesign_release() {
     local attempt=1
@@ -135,8 +135,8 @@ codesign_nested_release_code() {
 }
 
 xcodebuild \
-    -project TokenAtlas.xcodeproj \
-    -scheme TokenAtlas \
+    -project Atlas.xcodeproj \
+    -scheme Atlas \
     -configuration "$CONFIGURATION" \
     -derivedDataPath "$DERIVED" \
     "${XCODE_BUILD_ARGS[@]}" \
@@ -173,7 +173,7 @@ fi
 
 make_dmg() {
     local stage; stage="$(mktemp -d)"
-    local rw_dmg="$DIST/.TokenAtlas-$VERSION-rw.dmg"
+    local rw_dmg="$DIST/.Atlas-$VERSION-rw.dmg"
     local mount_dir; mount_dir="$(mktemp -d)"
     local attached=0
 
@@ -192,7 +192,7 @@ make_dmg() {
     mkdir -p "$stage/.background"
     swift scripts/render-dmg-background.swift "$stage/.background/dmg-background.png"
 
-    hdiutil create -volname "TokenAtlas" -srcfolder "$stage" -ov -fs HFS+ -format UDRW "$rw_dmg"
+    hdiutil create -volname "Atlas" -srcfolder "$stage" -ov -fs HFS+ -format UDRW "$rw_dmg"
     hdiutil attach "$rw_dmg" -mountpoint "$mount_dir" -nobrowse -noverify -noautoopen
     attached=1
 
@@ -214,9 +214,9 @@ tell application "Finder"
         set text size of viewOptions to 16
         set background picture of viewOptions to backgroundImage
 
-        set position of item "TokenAtlas.app" to {410, 490}
+        set position of item "Atlas.app" to {410, 490}
         set position of item "Applications" to {950, 490}
-        select item "TokenAtlas.app"
+        select item "Atlas.app"
 
         close
         open

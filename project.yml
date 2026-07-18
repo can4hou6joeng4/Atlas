@@ -1,6 +1,6 @@
-name: TokenAtlas
+name: Atlas
 options:
-  bundleIdPrefix: com.tokenatlas
+  bundleIdPrefix: com.atlas
   deploymentTarget:
     macOS: "14.0"
   xcodeVersion: "26.0"
@@ -117,7 +117,7 @@ targets:
       - sdk: libc++.tbd
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.tokenatlas.AtollEmbed
+        PRODUCT_BUNDLE_IDENTIFIER: com.atlas.AtollEmbed
         PRODUCT_NAME: AtollEmbed
         PRODUCT_MODULE_NAME: AtollEmbed
         GENERATE_INFOPLIST_FILE: YES
@@ -136,14 +136,14 @@ targets:
           ENABLE_HARDENED_RUNTIME: YES
           OTHER_CODE_SIGN_FLAGS: "--timestamp"
 
-  TokenAtlas:
+  Atlas:
     type: application
     platform: macOS
     sources:
-      - path: TokenAtlas
+      - path: Atlas
         excludes:
           - Resources/GitTools
-      - path: TokenAtlas/Resources/GitTools
+      - path: Atlas/Resources/GitTools
         type: folder
         buildPhase: resources
     dependencies:
@@ -230,65 +230,65 @@ targets:
           /usr/bin/install -m 644 "${SRCROOT}/ThirdParty/CppJieba/dict/stop_words.utf8" "$JIEBA_RESOURCES_DIR/stop_words.utf8"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.tokenatlas.TokenAtlas
-        PRODUCT_NAME: TokenAtlas
-        PRODUCT_MODULE_NAME: TokenAtlas
-        INFOPLIST_FILE: TokenAtlas/App/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.atlas.Atlas
+        PRODUCT_NAME: Atlas
+        PRODUCT_MODULE_NAME: Atlas
+        INFOPLIST_FILE: Atlas/App/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         COMBINE_HIDPI_IMAGES: YES
         GENERATE_INFOPLIST_FILE: NO
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
-        SWIFT_OBJC_BRIDGING_HEADER: TokenAtlas/Bridging/TokenAtlas-Bridging-Header.h
+        SWIFT_OBJC_BRIDGING_HEADER: Atlas/Bridging/Atlas-Bridging-Header.h
         HEADER_SEARCH_PATHS: "$(inherited) ThirdParty/CppJieba/include ThirdParty/CppJieba/deps/limonp/include"
         CLANG_CXX_LANGUAGE_STANDARD: gnu++17
         CLANG_CXX_LIBRARY: libc++
       configs:
         Debug:
-          CODE_SIGN_ENTITLEMENTS: TokenAtlas/App/TokenAtlas.entitlements
+          CODE_SIGN_ENTITLEMENTS: Atlas/App/Atlas.entitlements
           ENABLE_HARDENED_RUNTIME: NO
           CODE_SIGN_IDENTITY: "-"
           CODE_SIGN_STYLE: Automatic
         Release:
-          CODE_SIGN_ENTITLEMENTS: TokenAtlas/App/TokenAtlas.entitlements
+          CODE_SIGN_ENTITLEMENTS: Atlas/App/Atlas.entitlements
           ENABLE_HARDENED_RUNTIME: NO
           CODE_SIGN_IDENTITY: "-"
           CODE_SIGN_STYLE: Automatic
         ReleaseSigned:
-          CODE_SIGN_ENTITLEMENTS: TokenAtlas/App/TokenAtlas.entitlements
+          CODE_SIGN_ENTITLEMENTS: Atlas/App/Atlas.entitlements
           ENABLE_HARDENED_RUNTIME: YES
           CODE_SIGN_IDENTITY: "$(SIGN_IDENTITY)"
           CODE_SIGN_STYLE: Manual
           DEVELOPMENT_TEAM: "$(APPLE_TEAM_ID)"
           OTHER_CODE_SIGN_FLAGS: "--timestamp"
-          PROVISIONING_PROFILE: "$(TOKENATLAS_PROVISIONING_PROFILE)"
-          PROVISIONING_PROFILE_SPECIFIER: "$(TOKENATLAS_PROVISIONING_PROFILE_SPECIFIER)"
+          PROVISIONING_PROFILE: "$(ATLAS_PROVISIONING_PROFILE)"
+          PROVISIONING_PROFILE_SPECIFIER: "$(ATLAS_PROVISIONING_PROFILE_SPECIFIER)"
 
-  TokenAtlasTests:
+  AtlasTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - path: TokenAtlasTests
+      - path: AtlasTests
     dependencies:
-      - target: TokenAtlas
+      - target: Atlas
       - target: AtollEmbed
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.tokenatlas.TokenAtlasTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.atlas.AtlasTests
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TokenAtlas.app/Contents/MacOS/TokenAtlas"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Atlas.app/Contents/MacOS/Atlas"
         BUNDLE_LOADER: "$(TEST_HOST)"
 
 schemes:
-  TokenAtlas:
+  Atlas:
     build:
       targets:
-        TokenAtlas: all
+        Atlas: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - TokenAtlasTests
+        - AtlasTests
     profile:
       config: Release
     analyze:

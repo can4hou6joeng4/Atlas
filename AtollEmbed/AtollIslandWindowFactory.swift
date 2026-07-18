@@ -88,7 +88,7 @@ public enum AtollIslandSizing {
 public enum AtollIslandWindowFactory {
     public static func makeWindow(
         frame: CGRect,
-        title: String = "TokenAtlas Notch Island"
+        title: String = "Atlas Notch Island"
     ) -> NSPanel {
         let window = DynamicIslandWindow(
             contentRect: frame,

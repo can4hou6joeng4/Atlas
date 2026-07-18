@@ -21,6 +21,6 @@ Include:
 - Whether local files, credentials, macOS permissions, or update delivery are
   involved.
 
-TokenAtlas is a local-first app, so reports involving local session data,
+Atlas is a local-first app, so reports involving local session data,
 filesystem permissions, Sparkle update delivery, release signing, or bundled
 third-party code are especially relevant.

@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
-# Build a Debug TokenAtlas.app to the canonical DerivedData path and launch it.
+# Build a Debug Atlas.app to the canonical DerivedData path and launch it.
 #
-# Why not `open -a TokenAtlas` or the default DerivedData path: this is a
+# Why not `open -a Atlas` or the default DerivedData path: this is a
 # menu-bar (LSUIElement) app. Multiple registered .app bundles with the same
 # bundle id cause Launch Services conflicts and the menu-bar item silently fails
-# to appear. Always build to /tmp/TokenAtlas-build and launch by full path so
+# to appear. Always build to /tmp/atlas-build and launch by full path so
 # there is exactly one known bundle.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DERIVED=/tmp/TokenAtlas-build
-APP="$DERIVED/Build/Products/Debug/TokenAtlas.app"
-APP_PROCESS_PATTERN="TokenAtlas.app/Contents/MacOS/TokenAtlas"
-APP_HELPER_PROCESS_PATTERN="TokenAtlas.app/Contents/Resources/mediaremote-adapter.pl"
+DERIVED=/tmp/atlas-build
+APP="$DERIVED/Build/Products/Debug/Atlas.app"
+APP_PROCESS_PATTERN="Atlas.app/Contents/MacOS/Atlas"
+APP_HELPER_PROCESS_PATTERN="Atlas.app/Contents/Resources/mediaremote-adapter.pl"
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 require_apple_silicon() {
     if [[ "$(uname -m)" != "arm64" ]]; then
-        echo "error: TokenAtlas now supports Apple Silicon Macs only." >&2
+        echo "error: Atlas now supports Apple Silicon Macs only." >&2
         exit 1
     fi
 }
@@ -46,7 +46,7 @@ stop_running_app() {
         return 0
     fi
 
-    echo "==> Stopping existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')"
+    echo "==> Stopping existing Atlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')"
     kill -TERM $pids 2>/dev/null || true
     if wait_until_stopped 30; then
         return 0
@@ -60,22 +60,22 @@ stop_running_app() {
     fi
 
     pids="$(running_app_pids)"
-    echo "error: unable to stop existing TokenAtlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')" >&2
+    echo "error: unable to stop existing Atlas/legacy app process(es): $(echo "$pids" | tr '\n' ' ')" >&2
     return 1
 }
 
 unregister_bundle_if_present() {
     local bundle="$1"
     if [[ -d "$bundle" ]]; then
-        echo "==> Unregistering stale TokenAtlas bundle: $bundle"
+        echo "==> Unregistering stale Atlas bundle: $bundle"
         "$LSREGISTER" -u "$bundle" 2>/dev/null || true
     fi
 }
 
 cleanup_stale_registrations() {
-    unregister_bundle_if_present "/Applications/TokenAtlas.app"
-    unregister_bundle_if_present "/tmp/token-atlas-build/Build/Products/Debug/TokenAtlas.app"
-    unregister_bundle_if_present "/tmp/TokenAtlas-build-tests/Build/Products/Debug/TokenAtlas.app"
+    unregister_bundle_if_present "/Applications/Atlas.app"
+    unregister_bundle_if_present "/tmp/atlas-build/Build/Products/Debug/Atlas.app"
+    unregister_bundle_if_present "/tmp/Atlas-build-tests/Build/Products/Debug/Atlas.app"
 }
 
 require_apple_silicon
@@ -87,14 +87,14 @@ stop_running_app
 cleanup_stale_registrations
 
 xcodebuild \
-    -project TokenAtlas.xcodeproj \
-    -scheme TokenAtlas \
+    -project Atlas.xcodeproj \
+    -scheme Atlas \
     -configuration Debug \
     -derivedDataPath "$DERIVED" \
     ARCHS=arm64 \
     build
 
-ENTITLEMENTS="$(mktemp "${TMPDIR:-/tmp}/token-atlas-entitlements.XXXXXX")"
+ENTITLEMENTS="$(mktemp "${TMPDIR:-/tmp}/atlas-entitlements.XXXXXX")"
 if ! codesign -d --entitlements :- "$APP" > "$ENTITLEMENTS" 2>/dev/null; then
     rm -f "$ENTITLEMENTS"
     ENTITLEMENTS=""
@@ -116,14 +116,14 @@ for ((i = 0; i < 20; i++)); do
 done
 
 if [[ -z "$(running_app_pids)" ]]; then
-    echo "error: launch did not produce a TokenAtlas process" >&2
+    echo "error: launch did not produce an Atlas process" >&2
     exit 1
 fi
 
 for ((i = 0; i < 24; i++)); do
     sleep 0.25
     if [[ -z "$(running_app_pids)" ]]; then
-        echo "error: TokenAtlas process exited during startup verification" >&2
+        echo "error: Atlas process exited during startup verification" >&2
         exit 1
     fi
 done
