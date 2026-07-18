@@ -6,6 +6,31 @@
     <description>Atlas Sparkle updates</description>
     <language>en</language>
     <item>
+      <title>Version 1.1.0</title>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0.0</sparkle:minimumSystemVersion>
+      <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+      <description><![CDATA[
+<h2>本次更新</h2>
+<ul>
+<li>修复子模块远端指向(重建 Atoll fork,CppJieba 改指上游)</li>
+<li>release notes 列表项缩进续行并入所属条目</li>
+<li>清理旧应用名称与状态刷新</li>
+<li>重新探测活动权限状态</li>
+<li>修复状态栏周期刷新复发</li>
+<li>修复授权失败误清令牌</li>
+<li>修复状态栏周期刷新</li>
+<li>目录/模块/scheme:TokenAtlas → Atlas、TokenAtlasTests → AtlasTests</li>
+</ul>
+]]></description>
+      <pubDate>Sat, 18 Jul 2026 14:29:29 GMT</pubDate>
+      <enclosure url="https://github.com/can4hou6joeng4/Atlas/releases/download/v1.1.0/Atlas-1.1.0.zip" sparkle:edSignature="SEtld6omrHNkXXmlIzQuKMLuOQvZKBqaPy/TuH8LltCY2yezo72EKzbNaDw/hEtBtXCYcC8HZmwpfrKLPt0FDw==" length="74377117" type="application/octet-stream"/>
+      <sparkle:deltas>
+        <enclosure url="https://github.com/can4hou6joeng4/Atlas/releases/download/v1.1.0/Atlas-2-from-7.delta" sparkle:deltaFrom="7" sparkle:edSignature="iO1GhY3Ij97iUpTKfOTQApDbBLTGcmqJcAi5IDgT+SH3YmUrl4vXyAmWC5wFq4r30H2X+J5jboB794jbFZWPBQ==" length="6211946" type="application/octet-stream"/>
+      </sparkle:deltas>
+    </item>
+    <item>
       <title>Version 1.0.0</title>
       <sparkle:version>7</sparkle:version>
       <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
