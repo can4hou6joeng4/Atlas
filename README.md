@@ -33,6 +33,7 @@
 
 ## Table of Contents
 
+- [Why TokenAtlas](#why-tokenatlas)
 - [Features](#features)
 - [Highlights](#highlights)
 - [Quick Start](#quick-start)
@@ -47,6 +48,12 @@
 - [Star History](#star-history)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Why TokenAtlas
+
+An **atlas** is a book of sea charts — maps that turn open water into something you can navigate. TokenAtlas does the same for your AI coding: it charts the tokens, cost, sessions, and Git activity you produce every day into a map you can actually read.
+
+Part of a nautical family: [Harbor](https://github.com/can4hou6joeng4/Harbor) is where knowledge docks, [Beacon](https://github.com/can4hou6joeng4/Beacon) lights up expiring certificates before they bite, and TokenAtlas charts the voyage.
 
 ## Features
 
