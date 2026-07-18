@@ -30,20 +30,5 @@
         <enclosure url="https://github.com/can4hou6joeng4/Atlas/releases/download/v1.1.0/Atlas-2-from-7.delta" sparkle:deltaFrom="7" sparkle:edSignature="iO1GhY3Ij97iUpTKfOTQApDbBLTGcmqJcAi5IDgT+SH3YmUrl4vXyAmWC5wFq4r30H2X+J5jboB794jbFZWPBQ==" length="6211946" type="application/octet-stream"/>
       </sparkle:deltas>
     </item>
-    <item>
-      <title>Version 1.0.0</title>
-      <sparkle:version>7</sparkle:version>
-      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
-      <sparkle:minimumSystemVersion>14.0.0</sparkle:minimumSystemVersion>
-      <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-      <description><![CDATA[
-<h2>本次更新</h2>
-<ul>
-<li>完善公开仓库展示</li>
-</ul>
-]]></description>
-      <pubDate>Mon, 01 Jun 2026 08:26:11 GMT</pubDate>
-      <enclosure url="https://github.com/can4hou6joeng4/Atlas/releases/download/v1.0.0/TokenAtlas-1.0.0.zip" sparkle:edSignature="niOZwektI6OMkTyLPS1hx9d30HYmZOhxBONLlC6ryJaCcMgVY90S3QnCCEnSbxfPE2AaScIyVG76zLjosm9FDQ==" length="74440942" type="application/octet-stream"/>
-    </item>
   </channel>
 </rss>
