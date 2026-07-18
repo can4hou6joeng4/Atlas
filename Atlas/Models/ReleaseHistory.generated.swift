@@ -3,6 +3,18 @@
 extension ReleaseHistoryCatalog {
     static let generatedEntries: [ReleaseHistoryEntry] = [
         ReleaseHistoryEntry(
+            version: "1.1.0",
+            date: "July 18, 2026",
+            headline: "修复子模块远端指向(重建 Atoll fork,CppJieba 改指上游)",
+            changes: [
+                "release notes 列表项缩进续行并入所属条目",
+                "清理旧应用名称与状态刷新",
+                "重新探测活动权限状态",
+                "修复状态栏周期刷新复发",
+                "修复授权失败误清令牌",
+            ]
+        ),
+        ReleaseHistoryEntry(
             version: "1.0.0",
             date: "June 1, 2026",
             headline: "重新定位为精简后的新产品起点",
