@@ -2,7 +2,7 @@
 # Build a local Release Atlas.app and install it as the machine app.
 #
 # This is for daily local use, not development verification. Keep
-# scripts/run-debug.sh on /tmp/atlas-build so Launch Services does not mix
+# scripts/run-debug.sh on /tmp/Atlas-build so Launch Services does not mix
 # Debug menu-bar bundles with the installed app.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -126,7 +126,7 @@ unregister_bundle_if_present() {
 
 cleanup_stale_registrations() {
     unregister_bundle_if_present "$INSTALL_APP"
-    unregister_bundle_if_present "/tmp/atlas-build/Build/Products/Debug/Atlas.app"
+    unregister_bundle_if_present "/tmp/Atlas-build/Build/Products/Debug/Atlas.app"
     unregister_bundle_if_present "/tmp/Atlas-build-tests/Build/Products/Debug/Atlas.app"
 }
 

@@ -179,7 +179,7 @@ bash scripts/run-debug.sh    # generate, build Debug, and launch
 bash scripts/run-tests.sh    # Python + XCTest suites
 ```
 
-The debug launcher builds into `/tmp/atlas-build` and launches by full path. This avoids Launch Services conflicts for the menu-bar (`LSUIElement`) app. For local daily use, install a separate bundle:
+The debug launcher builds into `/tmp/Atlas-build` and launches by full path. This avoids Launch Services conflicts for the menu-bar (`LSUIElement`) app. For local daily use, install a separate bundle:
 
 ```bash
 bash scripts/install-app.sh

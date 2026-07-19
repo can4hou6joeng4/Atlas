@@ -55,8 +55,8 @@ cleanup_test_bundle_registration() {
     if [[ -d "$TEST_APP" ]]; then
         "$LSREGISTER" -u "$TEST_APP" 2>/dev/null || true
     fi
-    if [[ -d "/tmp/atlas-build/Build/Products/Debug/Atlas.app" ]]; then
-        "$LSREGISTER" -u "/tmp/atlas-build/Build/Products/Debug/Atlas.app" 2>/dev/null || true
+    if [[ -d "/tmp/Atlas-build/Build/Products/Debug/Atlas.app" ]]; then
+        "$LSREGISTER" -u "/tmp/Atlas-build/Build/Products/Debug/Atlas.app" 2>/dev/null || true
     fi
 }
 

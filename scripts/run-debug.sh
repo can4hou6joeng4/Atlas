@@ -4,12 +4,12 @@
 # Why not `open -a Atlas` or the default DerivedData path: this is a
 # menu-bar (LSUIElement) app. Multiple registered .app bundles with the same
 # bundle id cause Launch Services conflicts and the menu-bar item silently fails
-# to appear. Always build to /tmp/atlas-build and launch by full path so
+# to appear. Always build to /tmp/Atlas-build and launch by full path so
 # there is exactly one known bundle.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DERIVED=/tmp/atlas-build
+DERIVED=/tmp/Atlas-build
 APP="$DERIVED/Build/Products/Debug/Atlas.app"
 APP_PROCESS_PATTERN="Atlas.app/Contents/MacOS/Atlas"
 APP_HELPER_PROCESS_PATTERN="Atlas.app/Contents/Resources/mediaremote-adapter.pl"
@@ -74,7 +74,7 @@ unregister_bundle_if_present() {
 
 cleanup_stale_registrations() {
     unregister_bundle_if_present "/Applications/Atlas.app"
-    unregister_bundle_if_present "/tmp/atlas-build/Build/Products/Debug/Atlas.app"
+    unregister_bundle_if_present "/tmp/Atlas-build/Build/Products/Debug/Atlas.app"
     unregister_bundle_if_present "/tmp/Atlas-build-tests/Build/Products/Debug/Atlas.app"
 }
 
