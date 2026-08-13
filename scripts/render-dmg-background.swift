@@ -86,7 +86,7 @@ NSColor(srgbRed: 0.106, green: 0.129, blue: 0.157, alpha: 1).setFill()
 topBand.fill()
 
 drawText(
-    "Drag TokenAtlas to Applications",
+    "Drag Atlas to Applications",
     in: CGRect(x: 150, y: 142, width: 1060, height: 86),
     font: .systemFont(ofSize: 62, weight: .medium),
     color: NSColor(srgbRed: 0.105, green: 0.118, blue: 0.135, alpha: 1)

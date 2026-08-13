@@ -2,14 +2,14 @@
 """Prepend a release <item> to the Sparkle appcast.
 
 The appcast is a small RSS file hosted on GitHub Pages
-(https://can4hou6joeng4.github.io/TokenAtlas/appcast.xml). The release workflow
+(https://can4hou6joeng4.github.io/Atlas/appcast.xml). The release workflow
 fetches the current copy, runs this script to add the new version's <item>,
 and republishes it to the gh-pages branch.
 
 Usage:
   update-appcast.py \
       --version 1.2.0 --build 42 \
-      --url https://github.com/can4hou6joeng4/TokenAtlas/releases/download/v1.2.0/TokenAtlas-1.2.0.zip \
+      --url https://github.com/can4hou6joeng4/Atlas/releases/download/v1.2.0/Atlas-1.2.0.zip \
       --enclosure-attrs 'sparkle:edSignature="..." length="12345"' \
       --release-notes-file release_notes.html \
       --min-system-version 14.0.0 \
@@ -31,14 +31,14 @@ import os
 import sys
 import time
 
-FEED_URL = "https://can4hou6joeng4.github.io/TokenAtlas/appcast.xml"
+FEED_URL = "https://can4hou6joeng4.github.io/Atlas/appcast.xml"
 
 SKELETON = """<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>TokenAtlas</title>
+    <title>Atlas</title>
     <link>{feed}</link>
-    <description>Most recent updates to TokenAtlas.</description>
+    <description>Most recent updates to Atlas.</description>
     <language>en</language>
   </channel>
 </rss>

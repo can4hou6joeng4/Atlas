@@ -14,7 +14,7 @@ from pathlib import Path
 from release_notes_lib import SEMVER_TAG_RE, CommitNote, read_commits, run_git, semver_key, semver_tags, tag_exists
 
 
-DEFAULT_OUTPUT = Path("TokenAtlas/Models/ReleaseHistory.generated.swift")
+DEFAULT_OUTPUT = Path("Atlas/Models/ReleaseHistory.generated.swift")
 DEFAULT_OVERRIDE_DIR = Path("release-notes/history")
 DEFAULT_START_TAG = "v1.0.0"
 FALLBACK_CHANGE = "Stability and release pipeline improvements."

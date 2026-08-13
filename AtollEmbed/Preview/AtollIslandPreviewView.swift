@@ -609,7 +609,7 @@ private struct AtollIslandOpenPreviewColumn: View {
                     .font(.system(size: 34, weight: .semibold))
                     .foregroundStyle(Color.accentColor)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("TokenAtlas.dmg")
+                    Text("Atlas.dmg")
                         .font(.system(size: 16, weight: .semibold))
                     tinyProgress(value: 0.58, color: .accentColor)
                         .frame(height: 8)

@@ -99,6 +99,7 @@ def group_for_subject(subject: str) -> str:
 def clean_body_items(body: str) -> list[str]:
     items: list[str] = []
     paragraph: list[str] = []
+    current_item: list[str] | None = None
 
     def flush_paragraph() -> None:
         nonlocal paragraph
@@ -106,25 +107,38 @@ def clean_body_items(body: str) -> list[str]:
             items.append(" ".join(paragraph).strip())
             paragraph = []
 
+    def flush_item() -> None:
+        nonlocal current_item
+        if current_item:
+            items.append(" ".join(current_item).strip())
+            current_item = None
+
     for raw_line in body.splitlines():
         line = raw_line.strip()
         if not line:
             flush_paragraph()
+            flush_item()
             continue
         if HEADING_ONLY_RE.match(line) or TRAILER_RE.match(line):
             flush_paragraph()
+            flush_item()
             continue
 
         list_match = LIST_ITEM_RE.match(line)
         if list_match:
             flush_paragraph()
+            flush_item()
             text = list_match.group("text").strip()
             if text:
-                items.append(text)
+                current_item = [text]
+        elif current_item is not None and raw_line[:1].isspace():
+            current_item.append(line)
         else:
+            flush_item()
             paragraph.append(line)
 
     flush_paragraph()
+    flush_item()
 
     deduped: list[str] = []
     seen: set[str] = set()

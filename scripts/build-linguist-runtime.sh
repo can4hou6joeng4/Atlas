@@ -11,14 +11,14 @@
 #     bin/scc. If the source contains manifest.json, it is preserved.
 #
 #   INSTALL_LINGUIST_RUNTIME=1
-#     Installs github-linguist into TokenAtlas/Resources/GitTools/gems using
+#     Installs github-linguist into Atlas/Resources/GitTools/gems using
 #     Homebrew Ruby when available, and creates a wrapper in bin/github-linguist.
 #     This is useful for local development only. A fully redistributable release
 #     must provide a relocatable runtime source.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-TOOLS_DIR="$PWD/TokenAtlas/Resources/GitTools"
+TOOLS_DIR="$PWD/Atlas/Resources/GitTools"
 BIN_DIR="$TOOLS_DIR/bin"
 GEMS_DIR="$TOOLS_DIR/gems"
 MANIFEST="$TOOLS_DIR/manifest.json"

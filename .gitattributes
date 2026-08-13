@@ -1,4 +1,4 @@
-# Git attributes for TokenAtlas
+# Git attributes for Atlas
 # -----------------------------------------------------------------------------
 # Normalize line endings: store text with LF in the repository, auto-detecting
 # text vs binary for anything not listed explicitly below.
