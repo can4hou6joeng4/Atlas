@@ -172,11 +172,13 @@ struct TranscriptParserTests {
         let dir = try TempDir.make()
         defer { try? FileManager.default.removeItem(at: dir) }
         let url = dir.appendingPathComponent("session.jsonl")
+        // swiftlint:disable line_length
         let text = """
         {"type":"assistant","timestamp":"2026-02-01T00:00:01.000Z","requestId":"r1","message":{"id":"m1","model":"model-a","content":[{"type":"text","text":"just thinking"}],"usage":{"input_tokens":10,"output_tokens":5}}}
         {"type":"assistant","timestamp":"2026-02-01T00:00:02.000Z","requestId":"r2","message":{"id":"m2","model":"model-a","content":[{"type":"tool_use","id":"t1","name":"Bash","input":{"command":"ls"}},{"type":"tool_use","id":"t2","name":"Read","input":{"file_path":"/tmp/a"}},{"type":"tool_use","id":"t3","name":"Bash","input":{"command":"pwd"}}],"usage":{"input_tokens":20,"output_tokens":10}}}
         {"type":"assistant","timestamp":"2026-02-01T00:00:03.000Z","requestId":"r3","message":{"id":"m3","model":"model-a","content":[{"type":"text","text":"running the skill"},{"type":"tool_use","id":"t4","name":"Skill","input":{"skill":"code-review","args":"--effort high HEAD"}}],"usage":{"input_tokens":30,"output_tokens":15}}}
         """
+        // swiftlint:enable line_length
         try TempDir.write(text, to: url)
 
         let stats = try #require(await TranscriptParser(pricing: TestPricing.table)
@@ -199,10 +201,12 @@ struct TranscriptParserTests {
         let dir = try TempDir.make()
         defer { try? FileManager.default.removeItem(at: dir) }
         let url = dir.appendingPathComponent("session.jsonl")
+        // swiftlint:disable line_length
         let text = """
         {"type":"assistant","timestamp":"2026-02-01T00:00:01.000Z","requestId":"r1","message":{"id":"m1","model":"model-a","content":[{"type":"tool_use","id":"t1","name":"Skill","input":{"args":"no skill field"}}],"usage":{"input_tokens":10,"output_tokens":5}}}
         {"type":"assistant","timestamp":"2026-02-01T00:00:02.000Z","requestId":"r2","message":{"id":"m2","model":"model-a","content":[{"type":"tool_use","id":"t2","name":"Skill","input":"not-an-object"}],"usage":{"input_tokens":10,"output_tokens":5}}}
         """
+        // swiftlint:enable line_length
         try TempDir.write(text, to: url)
 
         let stats = try #require(await TranscriptParser(pricing: TestPricing.table)
