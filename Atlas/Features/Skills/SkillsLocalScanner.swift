@@ -390,6 +390,8 @@ struct SkillsLocalScanner: SkillsLocalScanning, Sendable {
         }.first
     }
 
+    // The manifest mirrors five independent optional fields from plugin.json.
+    // swiftlint:disable:next large_tuple
     private static func parseCodexPluginManifest(_ url: URL) -> (
         displayName: String?,
         version: String?,

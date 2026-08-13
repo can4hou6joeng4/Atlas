@@ -1299,6 +1299,8 @@ actor TranscriptAnalysisIndex {
         return examples
     }
 
+    // This persistence boundary maps the corpus_state columns one-to-one.
+    // swiftlint:disable:next function_parameter_count
     private func upsertCorpusState(
         scopeDigest: String,
         provider: ProviderKind,
